@@ -30,11 +30,11 @@ namespace Services.Test
             this.logger = new Mock<ILogger>();
             this.servicesConfig = new Mock<IServicesConfig>();
             this.servicesConfig.SetupProperty(x => x.JwtRolesFrom, "roles");
-            this.servicesConfig.SetupProperty(x => x.JwtEmailFrom, new List<string>(){"email"});
+            this.servicesConfig.SetupProperty(x => x.JwtEmailFrom, new List<string>() { "email" });
             this.servicesConfig.SetupProperty(x => x.JwtNameFrom, new List<string>() { "name" });
             this.servicesConfig.SetupProperty(x => x.JwtUserIdFrom, new List<string>() { "oid" });
             this.policiesMock = new Mock<IPolicies>();
-            
+
             this.users = new Users(
                 this.servicesConfig.Object,
                 this.logger.Object,
