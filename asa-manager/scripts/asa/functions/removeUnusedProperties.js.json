@@ -1,0 +1,13 @@
+﻿{
+  "JSCode": "// Copyright (c) Microsoft. All rights reserved.\n// This function is called in the shape of 'udf.removeUnusedProperties(record)'\n// from ASA query. Those unused properties will be removed from record for the\n// next step of ASA query.\nfunction main(record) {\n    if (record) {\n        record.IoTHub && delete record.IoTHub;\n        record.PartitionId && delete record.PartitionId;\n        record.EventEnqueuedUtcTime && delete record.EventEnqueuedUtcTime;\n        record.EventProcessedUtcTime && delete record.EventProcessedUtcTime;\n    }\n    return record;\n}",
+  "Name": "removeUnusedProperties",
+  "OutputType": "any",
+  "Type": "Scalar",
+  "FunctionInputs": [
+    {
+      "DataType": "record",
+      "IsConfigurationParameter": null
+    }
+  ],
+  "ScriptType": "JSFunction"
+}

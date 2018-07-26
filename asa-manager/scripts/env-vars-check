@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
+
+# Before checking all the env vars, detect whether secrets, usually encrypted, are available or not.
+# Secrets are not available when building a pull request, so the script will not check for those.
+detect_secrets() {
+    SECRETS_AVAILABLE="true"
+    if [[ "$TRAVIS_PULL_REQUEST" != "" && "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+        SECRETS_AVAILABLE="false"
+        echo "Warning: secrets and encrypted variables are not available when testing pull requests."
+    fi
+}
+
+detect_secrets
+
+if [[ -z "PCS_TELEMETRY_WEBSERVICE_URL" ]]; then
+    echo "Error: the PCS_TELEMETRY_WEBSERVICE_URL environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_CONFIG_WEBSERVICE_URL" ]]; then
+    echo "Error: the PCS_CONFIG_WEBSERVICE_URL environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_IOTHUBMANAGER_WEBSERVICE_URL" ]]; then
+    echo "Error: the PCS_IOTHUBMANAGER_WEBSERVICE_URL environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_ASA_DATA_AZUREBLOB_ACCOUNT" ]]; then
+    echo "Error: the PCS_ASA_DATA_AZUREBLOB_ACCOUNT environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_ASA_DATA_AZUREBLOB_KEY" && "$SECRETS_AVAILABLE" = "true" ]]; then
+    echo "Error: the PCS_ASA_DATA_AZUREBLOB_KEY environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_ASA_DATA_AZUREBLOB_ENDPOINT_SUFFIX" ]]; then
+    echo "Error: the PCS_ASA_DATA_AZUREBLOB_ENDPOINT_SUFFIX environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_EVENTHUB_CONNSTRING" && "$SECRETS_AVAILABLE" = "true" ]]; then
+    echo "Error: the PCS_EVENTHUB_CONNSTRING environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_TELEMETRY_DOCUMENTDB_CONNSTRING" && "$SECRETS_AVAILABLE" = "true" ]]; then
+    echo "Error: the PCS_TELEMETRY_DOCUMENTDB_CONNSTRING environment variable is not defined."
+    exit 1
+fi
+
+if [[ -z "PCS_EVENTHUB_NAME" ]]; then
+    echo "Error: the PCS_EVENTHUB_NAME environment variable is not defined."
+    exit 1
+fi

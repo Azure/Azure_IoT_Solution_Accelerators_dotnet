@@ -1,0 +1,42 @@
+[
+  {
+    "Fields": [ "temperature", "pressure" ],
+    "AggregationWindow": "tumblingwindow5minutes",
+    "Description": "temperature > 73 And pressure > 250",
+    "GroupId": "default_Chillers",
+    "Id": "default_AVG_Chiller_Pressure_High_5Min",
+    "Name": "Chiller average temperature too high and pressure too high over 5 minutes",
+    "Severity": "critical",
+    "__rulefilterjs": "return record.__aggregates.temperature.avg > 70 && record.__aggregates.pressure.avg > 250 ? true : false;"
+  },
+  {
+    "Fields": [ "humidity" ],
+    "AggregationWindow": "instant",
+    "Description": "humidity > 80",
+    "GroupId": "default_Chillers",
+    "Id": "default_Chiller_Humidity_High",
+    "Name": "Chiller humidity too high",
+    "Severity": "critical",
+    "__rulefilterjs": "return record.__aggregates.humidity > 80 ? true : false;"
+  },
+  {
+    "Fields": [ "humidity" ],
+    "AggregationWindow": "tumblingwindow10minutes",
+    "Description": "humidity > 75",
+    "GroupId": "default_Chillers",
+    "Id": "default_AVG_Chiller_Humidity_High_10Min",
+    "Name": "Chiller average humidity too high over 10 minutes",
+    "Severity": "critical",
+    "__rulefilterjs": "return record.__aggregates.humidity.avg > 75 ? true : false;"
+  },
+  {
+    "Fields": [ "humidity" ],
+    "AggregationWindow": "tumblingwindow1minutes",
+    "Description": "humidity > 75",
+    "GroupId": "default_Chillers",
+    "Id": "default_AVG_Chiller_Humidity_High_1Min",
+    "Name": "Chiller average humidity too high over 1 minutes",
+    "Severity": "critical",
+    "__rulefilterjs": "return record.__aggregates.humidity.avg > 75 ? true : false;"
+  }
+]

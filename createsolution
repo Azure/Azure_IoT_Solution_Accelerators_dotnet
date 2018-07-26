@@ -1,0 +1,35 @@
+#!/bin/bash
+declare -A repos
+repos+=(
+        ["asa-manager"]="https://github.com/Azure/asa-manager-dotnet.git"
+        ["pcs-auth"]="https://github.com/Azure/pcs-auth-dotnet.git"
+        ["pcs-config"]="https://github.com/Azure/pcs-config-dotnet.git"
+        ["iothub-manager"]="https://github.com/Azure/iothub-manager-dotnet.git"
+        ["pcs-storage-adapter"]="https://github.com/Azure/pcs-storage-adapter-dotnet.git"
+        ["device-telemetry"]="https://github.com/Azure/device-telemetry-dotnet.git"
+        ["device-simulation"]="https://github.com/Azure/device-simulation-dotnet.git"
+)
+
+rm -rf remote-monitoring.sln
+
+dotnet new sln --name remote-monitoring
+
+for key in ${!repos[@]}; do
+    dotnet sln remote-monitoring.sln add ${key}/Services/Services.csproj
+    dotnet sln remote-monitoring.sln add ${key}/Services.Test/Services.Test.csproj
+    dotnet sln remote-monitoring.sln add ${key}/WebService/WebService.csproj
+    dotnet sln remote-monitoring.sln add ${key}/WebService.Test/WebService.Test.csproj
+     
+done
+
+dotnet sln remote-monitoring.sln add asa-manager/DeviceGroupsAgent/DeviceGroupsAgent.csproj
+dotnet sln remote-monitoring.sln add asa-manager/DeviceGroupsAgent.Test/DeviceGroupsAgent.Test.csproj
+dotnet sln remote-monitoring.sln add asa-manager/SetupAgent/SetupAgent.csproj
+dotnet sln remote-monitoring.sln add asa-manager/SetupAgent.Test/SetupAgent.Test.csproj
+dotnet sln remote-monitoring.sln add asa-manager/TelemetryRulesAgent/TelemetryRulesAgent.csproj
+dotnet sln remote-monitoring.sln add asa-manager/TelemetryRulesAgent.Test/TelemetryRulesAgent.Test.csproj
+
+dotnet sln remote-monitoring.sln add device-simulation/SimulationAgent/SimulationAgent.csproj
+dotnet sln remote-monitoring.sln add device-simulation/SimulationAgent.Test/SimulationAgent.Test.csproj
+
+dotnet sln remote-monitoring.sln add iothub-manager/RecurringTasksAgent/RecurringTasksAgent.csproj

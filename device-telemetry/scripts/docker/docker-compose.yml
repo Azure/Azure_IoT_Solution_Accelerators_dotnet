@@ -1,0 +1,19 @@
+# You can use this file to setup the service locally, and start all the
+# containers at once.
+#
+# Usage:
+# - setup all the environment variables referenced below
+# - install Docker Compose, see https://docs.docker.com/compose/install
+# - open a console and `cd` into the folder that contains this file
+# - run `docker-compose up`
+
+version: "3"
+
+services:
+  telemetry:
+    image: azureiotpcs/telemetry-dotnet:testing
+    ports:
+      - "9004:9004"
+    environment:
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://localhost:9022/v1
+      - PCS_TELEMETRY_DOCUMENTDB_CONNSTRING

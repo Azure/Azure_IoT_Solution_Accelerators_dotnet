@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.SetupAgent</AssemblyName>
+    <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.SetupAgent</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+</Project>

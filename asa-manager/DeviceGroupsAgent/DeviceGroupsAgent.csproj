@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.DeviceGroupsAgent</AssemblyName>
+    <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.DeviceGroupsAgent</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+﻿{
+  "JSCode": "// Copyright (c) Microsoft. All rights reserved.\n// This function is called in the shape of 'udf.applyRuleFilter(record)'\n// from ASA query. The JavaScript code snippet encoded as one line string\n// in '__rulefilterjs' will be used to construct a Function callback and\n// evaluated by ASA and return the result to the ASA query to filter the\n// incoming record.\nfunction main(record) {\n    let ruleFunction = new Function('record', record.__rulefilterjs);\n    return ruleFunction(record);\n}",
+  "Name": "applyRuleFilter",
+  "OutputType": "any",
+  "Type": "Scalar",
+  "FunctionInputs": [
+    {
+      "DataType": "record",
+      "IsConfigurationParameter": null
+    }
+  ],
+  "ScriptType": "JSFunction"
+}

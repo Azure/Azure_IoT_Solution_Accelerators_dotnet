@@ -1,0 +1,140 @@
+# Usage:
+# - install Docker Compose, see https://docs.docker.com/compose/install
+# - open a console and `cd` into the folder that contains this file
+# - note how the file references many environment variables, either set
+#   them in your system or edit this file adding the values here
+# - run `docker-compose up`
+# - open the browser at http://127.0.0.1:10443
+#
+# For more information see
+# https://github.com/Azure/azure-iot-pcs-remote-monitoring-dotnet
+
+version: "3"
+
+services:
+  reverseproxy:
+    image: azureiotpcs/remote-monitoring-nginx:1.0.0
+    ports:
+      - "10443:443"
+    depends_on:
+      - webui
+      - auth
+      - iothubmanager
+      - devicesimulation
+      - telemetry
+      - config
+    volumes:
+      - /app/certs:/app/certs:ro
+
+  webui:
+    image: azureiotpcs/pcs-remote-monitoring-webui:1.0.0
+    ports:
+      - "443:443"
+    depends_on:
+      - auth
+      - iothubmanager
+      - devicesimulation
+      - telemetry
+      - config
+    volumes:
+      - /app/webui-config.js:/app/build/config.js:ro
+
+  auth:
+    image: azureiotpcs/pcs-auth-dotnet:1.0.0
+    ports:
+      - "9001:9001"
+    environment:
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+
+  iothubmanager:
+    image: azureiotpcs/iothub-manager-dotnet:1.0.0
+    depends_on:
+      - storageadapter
+    ports:
+      - "9002:9002"
+    environment:
+      - PCS_IOTHUB_CONNSTRING
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+
+  devicesimulation:
+    image: azureiotpcs/device-simulation-dotnet:1.0.0
+    depends_on:
+      - storageadapter
+    ports:
+      - "9003:9003"
+    environment:
+      - PCS_IOTHUB_CONNSTRING
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+      # This could be used to mount custom device models into the simulation
+      #volumes:
+      #- ./custom-data:/app/data:ro
+
+  telemetry:
+    image: azureiotpcs/telemetry-dotnet:1.0.0
+    depends_on:
+      - storageadapter
+    ports:
+      - "9004:9004"
+    environment:
+      - PCS_TELEMETRY_DOCUMENTDB_CONNSTRING
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+
+  config:
+    image: azureiotpcs/pcs-config-dotnet:1.0.0
+    depends_on:
+      - storageadapter
+      - telemetry
+      - devicesimulation
+    ports:
+      - "9005:9005"
+    environment:
+      - PCS_AZUREMAPS_KEY
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+      - PCS_DEVICESIMULATION_WEBSERVICE_URL=http://devicesimulation:9003/v1
+      - PCS_TELEMETRY_WEBSERVICE_URL=http://telemetry:9004/v1
+
+  storageadapter:
+    image: azureiotpcs/pcs-storage-adapter-dotnet:1.0.0
+    ports:
+      - "9022:9022"
+    environment:
+      - PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET
+
+  asamanager:
+    image: azureiotpcs/asa-manager-dotnet:1.0.0
+    depends_on: 
+      - telemetry
+      - iothubmanager
+      - config
+    environment:
+      - PCS_TELEMETRY_DOCUMENTDB_CONNSTRING
+      - PCS_TELEMETRY_WEBSERVICE_URL=http://telemetry:9004/v1
+      - PCS_CONFIG_WEBSERVICE_URL=http://config:9005/v1
+      - PCS_IOTHUBMANAGER_WEBSERVICE_URL=http://iothubmanager:9002/v1
+      - PCS_ASA_DATA_AZUREBLOB_ACCOUNT
+      - PCS_ASA_DATA_AZUREBLOB_KEY
+      - PCS_ASA_DATA_AZUREBLOB_ENDPOINT_SUFFIX
+      - PCS_EVENTHUB_CONNSTRING
+      - PCS_EVENTHUB_NAME
+      - PCS_AUTH_REQUIRED
+      - PCS_CORS_WHITELIST
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_APPLICATION_SECRET

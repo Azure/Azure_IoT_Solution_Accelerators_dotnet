@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
+# Note: Windows Bash doesn't support shebang extra params
+set -e
+
+# Note: use lowercase names for the Docker images
+DOCKER_IMAGE="azureiotpcs/asa-manager-dotnet"
+
+APP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && cd .. && pwd )/"
+source "$APP_HOME/scripts/.functions.sh"
+
+run_container() {
+    check_dependency_docker
+
+    $APP_HOME/scripts/env-vars-check
+
+    echo "Starting ASA manager ..."
+    docker run -it -p 9024:9024 \
+        -e PCS_TELEMETRY_WEBSERVICE_URL \
+        -e PCS_CONFIG_WEBSERVICE_URL \
+        -e PCS_IOTHUBMANAGER_WEBSERVICE_URL \
+        "$DOCKER_IMAGE:testing"
+}
+
+run_container

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
+
+# Before checking all the env vars, detect whether secrets, usually encrypted, are available or not.
+# Secrets are not available when building a pull request, so the script will not check for those.
+detect_secrets() {
+    SECRETS_AVAILABLE="true"
+    if [[ "$TRAVIS_PULL_REQUEST" != "" && "$TRAVIS_PULL_REQUEST" != "false" ]]; then
+        SECRETS_AVAILABLE="false"
+        echo "Warning: secrets and encrypted variables are not available when testing pull requests."
+    fi
+}
+
+detect_secrets
+
+# if [[ -z "$SOMETHING_SECRET" && "$SECRETS_AVAILABLE" = "true" ]]; then
+#     echo "Error: the SOMETHING_SECRET environment variable is not defined."
+#     exit -1
+# fi
+
+# if [[ -z "$SOMETHING_NOT_SECRET" ]]; then
+#     echo "Error: the SOMETHING_NOT_SECRET environment variable is not defined."
+#     exit -1
+# fi
+
+if [[ -z "$PCS_AUTH_ISSUER" ]]; then
+    echo "Error: the PCS_AUTH_ISSUER environment variable is not defined."
+    exit -1
+fi
+
+if [[ -z "$PCS_AUTH_AUDIENCE" ]]; then
+    echo "Error: the PCS_AUTH_AUDIENCE environment variable is not defined."
+    exit -1
+fi

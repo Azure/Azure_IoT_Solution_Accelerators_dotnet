@@ -1,0 +1,13 @@
+﻿{
+  "JSCode": "// Copyright (c) Microsoft. All rights reserved.\n// This function is called in the shape of 'udf.flattenMeasurements(record)'\n// from ASA query. The record will be flatten for two cases:\n// 1. Aggregated measurements\n//      \"measurements\": [\n//          \"measurementname\": \"temperature\",\n//          \"avg\": 72.0,\n//          \"max\": 73.0,\n//          \"min\": 71.0,\n//          \"count\": 2,\n//      ]\n// will be transformed into:\n//      \"temperature\" : {\n//          \"avg\": 72.0,\n//          \"max\": 73.0,\n//          \"min\": 71.0,\n//          \"count\": 2\n//      }\n//\n// 2. Instant measurement:\n//      { \"measurementname\": \"temperature\", \"measurementvalue\": \"73\" } \n// will be transformed into:\n//      { \"temperature\": 73 }\nfunction main(record) {\n\n    let flatRecord = {\n        '__deviceid': record.__deviceid,\n        '__ruleid': record.__ruleid\n    };\n\n    record.measurements.forEach(function (item) {\n        if (item.hasOwnProperty('measurementvalue')) {\n            flatRecord[item.measurementname] = item.measurementvalue;\n        }\n        else {\n            flatRecord[item.measurementname] = {\n                'avg': item.avg,\n                'max': item.max,\n                'min': item.min,\n                'count': item.count\n            };\n        }\n    });\n\n    return flatRecord;\n}",
+  "Name": "flattenMeasurements",
+  "OutputType": "any",
+  "Type": "Scalar",
+  "FunctionInputs": [
+    {
+      "DataType": "record",
+      "IsConfigurationParameter": null
+    }
+  ],
+  "ScriptType": "JSFunction"
+}
