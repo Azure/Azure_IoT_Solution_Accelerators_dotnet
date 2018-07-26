@@ -92,7 +92,7 @@ namespace Services.Test
         {
             return new List<Claim>()
             {
-                new Claim("aud", "1239a0f - 1230 - 123d - 1235 - 123e88123df7"),g
+                new Claim("aud", "1239a0f - 1230 - 123d - 1235 - 123e88123df7")
                 new Claim("iss", "https://sts.windows.net/123123bf-1231-123f-123b-123123123123/"),
                 new Claim("iat", "1231941234"),
                 new Claim("nbf", "1231941234"),
