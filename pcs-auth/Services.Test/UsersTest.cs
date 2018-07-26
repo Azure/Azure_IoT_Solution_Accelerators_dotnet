@@ -35,7 +35,7 @@ namespace Services.Test
             this.servicesConfig.SetupProperty(x => x.JwtNameFrom, new List<string>() { "name" });
             this.servicesConfig.SetupProperty(x => x.JwtUserIdFrom, new List<string>() { "oid" });
             this.policiesMock = new Mock<IPolicies>();
-            
+           
             this.users = new Users(
                 this.servicesConfig.Object,
                 this.logger.Object,

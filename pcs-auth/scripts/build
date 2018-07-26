@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
 
 # Usage:
 # Build the project in the local environment:  ./scripts/build
