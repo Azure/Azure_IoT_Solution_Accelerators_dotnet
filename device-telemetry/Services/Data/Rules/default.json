@@ -1,0 +1,84 @@
+﻿{
+  "Rules": [
+    {
+      "Name": "Chiller pressure too high",
+      "Enabled": true,
+      "Description": "Pressure > 250",
+      "GroupId": "Chillers",
+      "Severity": "Critical",
+      "Calculation": "Instant",
+      "TimePeriod": "00:00:00",
+      "Conditions": [
+        {
+          "Field": "pressure",
+          "Operator": "GreaterThan",
+          "Value": "250"
+        }
+      ]
+    },
+    {
+      "Name": "Prototyping device temp too high",
+      "Enabled": true,
+      "Description": "Temperature > 80 degrees",
+      "GroupId": "Prototyping devices",
+      "Severity": "Critical",
+      "Calculation": "Average",
+      "TimePeriod": "00:01:00",
+      "Conditions": [
+        {
+          "Field": "temperature",
+          "Operator": "GreaterThan",
+          "Value": "80"
+        }
+      ]
+    },
+    {
+      "Name": "Engine tank empty",
+      "Enabled": true,
+      "Description": "Fuel level is less than 5",
+      "GroupId": "Engines",
+      "Severity": "Info",
+      "Calculation": "Instant",
+      "TimePeriod": "00:00:00",
+      "Conditions": [
+        {
+          "Field": "fuel",
+          "Operator": "LessThan",
+          "Value": "5"
+        }
+      ]
+    },
+    {
+      "Name": "Higher than normal cargo temperature",
+      "Enabled": true,
+      "Description": "Cargo temperature is > 45 degrees",
+      "GroupId": "Trucks",
+      "Severity": "Warning",
+      "Calculation": "Average",
+      "TimePeriod": "00:05:00",
+      "Conditions": [
+        {
+          "Field": "cargotemperature",
+          "Operator": "GreaterThan",
+          "Value": "45"
+        }
+      ]
+    },
+    {
+      "Name": "Elevator vibration stopped",
+      "Enabled": true,
+      "Description": "Vibration < 0.1",
+      "GroupId": "Elevators",
+      "Severity": "Warning",
+      "Calculation": "Average",
+      "TimePeriod": "00:10:00",
+      "Conditions": [
+        {
+          "Field": "vibration",
+          "Operator": "LessThan",
+          "Value": "0.1"
+        }
+      ]
+    }
+  ]
+}

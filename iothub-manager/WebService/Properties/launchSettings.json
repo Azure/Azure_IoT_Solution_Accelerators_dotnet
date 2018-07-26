@@ -1,0 +1,30 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:9002/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:9002/v1/status",
+      "environmentVariables": {
+        "PCS_IOTHUB_CONNSTRING": "$(PCS_IOTHUB_CONNSTRING)"
+      }
+    },
+    "WebService": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:9002/v1/status",
+      "environmentVariables": {
+        "PCS_IOTHUB_CONNSTRING": "$(PCS_IOTHUB_CONNSTRING)",
+        "PCS_STORAGEADAPTER_WEBSERVICE_URL": "$(PCS_STORAGEADAPTER_WEBSERVICE_URL)"
+      },
+      "applicationUrl": "http://localhost:9002/v1/status"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7</LangVersion>
+    <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.Services</AssemblyName>
+    <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.Services</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="jint" Version="2.10.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="2.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.1" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.10.0" />
+    <PackageReference Include="Microsoft.Azure.EventHubs.Processor" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.0.0" />
+  </ItemGroup>
+</Project>

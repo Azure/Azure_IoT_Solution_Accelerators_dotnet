@@ -1,0 +1,24 @@
+# Usage:
+# - install Docker Compose, see https://docs.docker.com/compose/install
+# - open a console and `cd` into the folder that contains this file
+# - run `docker-compose up`
+
+version: "3"
+
+services:
+  iothubmanager:
+    image: azureiotpcs/iothub-manager-dotnet
+    depends_on:
+      - storageadapter
+    ports:
+      - "9002:9002"
+    environment:
+      - PCS_IOTHUB_CONNSTRING
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL
+    
+  storageadapter:
+    image: azureiotpcs/pcs-storage-adapter-dotnet:testing
+    ports:
+      - "9022:9022"
+    environment:
+      - PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING

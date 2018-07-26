@@ -1,0 +1,59 @@
+﻿[
+  {
+    "EventEnqueuedUtcTime": "2018-04-04T16:19:18.787Z",
+    "EventProcessedUtcTime": "2018-04-04T16:21:34.8285859Z",
+    "IoTHub": {
+      "ConnectionDeviceGenerationId": "636570705765671785",
+      "ConnectionDeviceId": "Simulated.chiller-01.0",
+      "CorrelationId": null,
+      "EnqueuedTime": "2018-04-04T16:19:18.538Z",
+      "MessageId": null,
+      "StreamId": null
+    },
+    "PartitionId": 1,
+    "humidity": 72.2477195950913,
+    "humidity_unit": "%",
+    "pressure": 300,
+    "pressure_unit": "psig",
+    "temperature": 73.4001469040057,
+    "temperature_unit": "F"
+  },
+  {
+    "EventEnqueuedUtcTime": "2018-04-04T16:22:18.787Z",
+    "EventProcessedUtcTime": "2018-04-04T16:23:34.8285859Z",
+    "IoTHub": {
+      "ConnectionDeviceGenerationId": "636570705765671785",
+      "ConnectionDeviceId": "Simulated.chiller-01.0",
+      "CorrelationId": null,
+      "EnqueuedTime": "2018-04-04T16:22:18.538Z",
+      "MessageId": null,
+      "StreamId": null
+    },
+    "PartitionId": 1,
+    "humidity": 72.2477195950913,
+    "humidity_unit": "%",
+    "pressure": 251,
+    "pressure_unit": "psig",
+    "temperature": 75.4001469040057,
+    "temperature_unit": "F"
+  },
+  {
+    "EventEnqueuedUtcTime": "2018-04-04T16:25:18.787Z",
+    "EventProcessedUtcTime": "2018-04-04T16:26:34.8285859Z",
+    "IoTHub": {
+      "ConnectionDeviceGenerationId": "636570705765671785",
+      "ConnectionDeviceId": "Simulated.chiller-01.0",
+      "CorrelationId": null,
+      "EnqueuedTime": "2018-04-04T16:19:25.538Z",
+      "MessageId": null,
+      "StreamId": null
+    },
+    "PartitionId": 1,
+    "humidity": 82.2477195950913,
+    "humidity_unit": "%",
+    "pressure": 251,
+    "pressure_unit": "psig",
+    "temperature": 75.4001469040057,
+    "temperature_unit": "F"
+  }
+]

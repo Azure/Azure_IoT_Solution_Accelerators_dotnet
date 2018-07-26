@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Copyright (c) Microsoft. All rights reserved.
+# Note: Windows Bash doesn't support shebang extra params
+set -e
+
+# Note: use lowercase names for the Docker images
+DOCKER_IMAGE="azureiotpcs/telemetry-dotnet"
+
+APP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && cd .. && pwd )/"
+source "$APP_HOME/scripts/.functions.sh"
+
+run_container() {
+    check_dependency_docker
+
+    $APP_HOME/scripts/env-vars-check
+
+    echo "Starting Telemetry service..."
+    docker run -it -p 9004:9004 \
+        -e PCS_TELEMETRY_DOCUMENTDB_CONNSTRING \
+        -e PCS_STORAGEADAPTER_WEBSERVICE_URL \
+        -e PCS_AUTH_ISSUER \
+        -e PCS_AUTH_AUDIENCE \
+        "$DOCKER_IMAGE:testing"
+}
+
+run_container

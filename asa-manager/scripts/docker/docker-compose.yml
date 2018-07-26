@@ -1,0 +1,81 @@
+# Copyright (c) Microsoft. All rights reserved.
+
+# Use this configuration to start all the dependencies, e.g. during development.
+#
+# To run also the ASA Manager service, uncomment the first block.
+#
+# Usage:
+# - install Docker Compose, see https://docs.docker.com/compose/install
+# - open a console and `cd` into the folder that contains this file
+# - run `docker-compose up`
+
+version: "3"
+
+services:
+
+# Uncomment this block to start also ASA Manager. Otherwise only
+# the dependencies are started, so you can run ASA Manager from your IDE.
+#
+#  asamanager:
+#    image: azureiotpcs/asa-manager-dotnet:testing
+#    depends_on:
+#      - config
+#      - telemetry
+#      - iothubmanager
+#    ports:
+#      - "9024:9024"
+#    environment:
+#      - PCS_CONFIG_WEBSERVICE_URL=http://config:9005/v1
+#      - PCS_TELEMETRY_WEBSERVICE_URL=http://telemetry:9004/v1
+#      - PCS_IOTHUBMANAGER_WEBSERVICE_URL=http://iothubmanager:9002/v1
+#      - PCS_ASA_DATA_AZUREBLOB_ACCOUNT
+#      - PCS_ASA_DATA_AZUREBLOB_KEY
+#      - PCS_ASA_DATA_AZUREBLOB_ENDPOINT_SUFFIX
+#      - PCS_EVENTHUB_CONNSTRING
+#      - PCS_EVENTHUB_NAME
+#      - PCS_TELEMETRY_DOCUMENTDB_CONNSTRING
+
+  storageadapter:
+    image: azureiotpcs/pcs-storage-adapter-dotnet:testing
+    ports:
+      - "9022:9022"
+    environment:
+      # Add the Document Db connection string here
+      # See https://ms.portal.azure.com/#create/Microsoft.DocumentDB
+      - PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING
+
+  config:
+    image: azureiotpcs/pcs-config-dotnet:testing
+    depends_on:
+      - storageadapter
+    ports:
+      - "9005:9005"
+    environment:
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+      - PCS_AUTH_REQUIRED=false
+
+  iothubmanager:
+    image: azureiotpcs/iothub-manager-dotnet:testing
+    ports:
+      - "9002:9002"
+    environment:
+      # Add IoT Hub connection string here
+      # See https://ms.portal.azure.com/#create/Microsoft.IotHub
+      - PCS_IOTHUB_CONNSTRING
+      - PCS_AUTH_REQUIRED=false
+      # TODO: the dependency on config is temporary
+      - PCS_CONFIG_WEBSERVICE_URL=http://config:9005/v1
+
+  telemetry:
+    image: azureiotpcs/telemetry-dotnet:testing
+    depends_on:
+      - storageadapter
+    ports:
+      - "9004:9004"
+    environment:
+      # Add the Document Db connection string here
+      # See https://ms.portal.azure.com/#create/Microsoft.DocumentDB
+      - PCS_TELEMETRY_DOCUMENTDB_CONNSTRING
+      - PCS_STORAGEADAPTER_WEBSERVICE_URL=http://storageadapter:9022/v1
+      - PCS_AUTH_REQUIRED=false
+    

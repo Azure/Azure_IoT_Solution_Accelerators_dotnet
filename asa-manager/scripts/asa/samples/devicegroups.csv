@@ -1,0 +1,5 @@
+DeviceId,GroupId
+"Simulated.chiller-01.0","default_Chillers"
+"Simulated.chiller-02.0","default_Chillers"
+"Simulated.truck-01.0","default_Truck"
+"Simulated.truck-02.0","default_Truck"
