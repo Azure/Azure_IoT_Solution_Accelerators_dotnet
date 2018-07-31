@@ -3,6 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.DeviceGroupsAgent</AssemblyName>
     <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.DeviceGroupsAgent</RootNamespace>
+    <Configurations>Debug;Release;RemoteMonitoring-Debug</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj" />

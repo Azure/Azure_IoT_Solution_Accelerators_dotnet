@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.SetupAgent</AssemblyName>
     <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.SetupAgent</RootNamespace>
+    <Configurations>Debug;Release;RemoteMonitoring-Debug</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Services\Services.csproj" />

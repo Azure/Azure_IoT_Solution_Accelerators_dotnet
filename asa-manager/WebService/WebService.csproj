@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.WebService</AssemblyName>
     <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.WebService</RootNamespace>
+    <Configurations>Debug;Release;RemoteMonitoring-Debug</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>

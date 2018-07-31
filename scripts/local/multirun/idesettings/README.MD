@@ -1,0 +1,1 @@
+To launch/debug entire solution (all microservices) at once. Please copy launch & build settings in the folder .vscode at the root of the repo.

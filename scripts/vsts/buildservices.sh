@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-APP_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ../../ && pwd )/"
+set -e
 
 servicestobuild=$SERVICESTOBUILD
 declare -A microservicefolders
@@ -30,3 +30,4 @@ build()
 cd $APP_HOME
 
 build
+set +e

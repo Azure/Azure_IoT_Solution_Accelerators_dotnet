@@ -4,6 +4,7 @@
     <LangVersion>7</LangVersion>
     <AssemblyName>Microsoft.Azure.IoTSolutions.UIConfig.Services</AssemblyName>
     <RootNamespace>Microsoft.Azure.IoTSolutions.UIConfig.Services</RootNamespace>
+    <Configurations>Debug;Release;RemoteMonitoring-Debug</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\DefaultLogo.svg" />

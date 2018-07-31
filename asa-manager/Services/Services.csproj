@@ -4,6 +4,7 @@
     <LangVersion>7</LangVersion>
     <AssemblyName>Microsoft.Azure.IoTSolutions.AsaManager.Services</AssemblyName>
     <RootNamespace>Microsoft.Azure.IoTSolutions.AsaManager.Services</RootNamespace>
+    <Configurations>Debug;Release;RemoteMonitoring-Debug</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="jint" Version="2.10.4" />
