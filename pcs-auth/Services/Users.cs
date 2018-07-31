@@ -85,6 +85,8 @@ namespace Microsoft.Azure.IoTSolutions.Auth.Services
 
         public IEnumerable<string> GetAllowedActions(IEnumerable<string> roles)
         {
+            // ensure only unique values are added to the allowed actions list
+            // if duplicate actions are allowed in multiple roles
             var allowedActions = new HashSet<string>();
             foreach (var role in roles)
             {
@@ -92,7 +94,7 @@ namespace Microsoft.Azure.IoTSolutions.Auth.Services
                 allowedActions.UnionWith(policy.AllowedActions);
             }
 
-            return allowedActions;
+            return allowedActions.ToList();
         }
     }
 }

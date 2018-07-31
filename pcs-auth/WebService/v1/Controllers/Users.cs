@@ -37,7 +37,7 @@ namespace Microsoft.Azure.IoTSolutions.Auth.WebService.v1.Controllers
         /// <param name="roles">a list of role names</param>
         /// <returns>a list of allowed actions</returns>
         [HttpPost("{id}/allowedActions")]
-        public IEnumerable<string> GetAllowedActions(string id, [FromBody]IEnumerable<string> roles)
+        public IEnumerable<string> GetAllowedActions([FromRoute]string id, [FromBody]IEnumerable<string> roles)
         {
             return this.users.GetAllowedActions(roles);
         }
