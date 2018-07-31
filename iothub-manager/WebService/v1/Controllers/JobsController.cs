@@ -66,6 +66,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <param name="parameter"></param>
         /// <returns></returns>
         [HttpPost]
+        [Authorize("CreateJobs")]
         public async Task<JobApiModel> ScheduleAsync([FromBody] JobApiModel parameter)
         {
             if (parameter.UpdateTwin != null)

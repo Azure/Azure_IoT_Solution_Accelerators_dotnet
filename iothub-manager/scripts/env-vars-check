@@ -22,6 +22,11 @@ if [[ -z "$PCS_STORAGEADAPTER_WEBSERVICE_URL" ]]; then
     exit -1
 fi
 
+if [[ -z "$PCS_AUTH_WEBSERVICE_URL" ]]; then
+    echo "Error: the PCS_AUTH_WEBSERVICE_URL environment variable is not defined."
+    exit -1
+fi
+
 if [[ -z "$PCS_AUTH_ISSUER" ]]; then
     echo "Error: the PCS_AUTH_ISSUER environment variable is not defined."
     exit -1

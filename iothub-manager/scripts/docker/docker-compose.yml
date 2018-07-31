@@ -15,7 +15,19 @@ services:
     environment:
       - PCS_IOTHUB_CONNSTRING
       - PCS_STORAGEADAPTER_WEBSERVICE_URL
-    
+      - PCS_AUTH_WEBSERVICE_URL
+
+  auth:
+    image: azureiotpcs/pcs-auth-dotnet:testing
+    ports:
+      - "9001:9001"
+    environment:
+      - PCS_AUTH_ISSUER
+      - PCS_AUTH_AUDIENCE
+      - PCS_AUTH_REQUIRED
+      - PCS_CORS_WHITELIST
+      - PCS_APPLICATION_SECRET
+
   storageadapter:
     image: azureiotpcs/pcs-storage-adapter-dotnet:testing
     ports:

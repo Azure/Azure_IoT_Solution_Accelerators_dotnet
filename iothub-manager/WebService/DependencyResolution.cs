@@ -81,6 +81,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService
             builder.RegisterType<Jobs>().As<IJobs>().SingleInstance();
             builder.RegisterType<StorageAdapterClient>().As<IStorageAdapterClient>().SingleInstance();
             builder.RegisterType<DeviceProperties>().As<IDeviceProperties>().SingleInstance();
+            builder.RegisterType<UserManagementClient>().As<IUserManagementClient>().SingleInstance();
         }
 
         private static void RegisterFactory(IContainer container)

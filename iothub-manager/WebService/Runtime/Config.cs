@@ -32,6 +32,9 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.Runtime
         private const string STORAGE_ADAPTER_KEY = "StorageAdapterService:";
         private const string STORAGE_ADAPTER_URL_KEY = STORAGE_ADAPTER_KEY + "webservice_url";
 
+        private const string USER_MANAGEMENT_KEY = "UserManagementService:";
+        private const string USER_MANAGEMENT_URL_KEY = USER_MANAGEMENT_KEY + "webservice_url";
+
         private const string CLIENT_AUTH_KEY = APPLICATION_KEY + "ClientAuth:";
         private const string CORS_WHITELIST_KEY = CLIENT_AUTH_KEY + "cors_whitelist";
         private const string AUTH_TYPE_KEY = CLIENT_AUTH_KEY + "auth_type";
@@ -76,6 +79,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.Runtime
                 DevicePropertiesTTL = configData.GetInt(DEVICE_PROPERTIES_TTL_KEY),
                 DevicePropertiesRebuildTimeout = configData.GetInt(DEVICE_PROPERTIES_REBUILD_TIMEOUT_KEY),
                 StorageAdapterApiUrl = configData.GetString(STORAGE_ADAPTER_URL_KEY),
+                UserManagementApiUrl = configData.GetString(USER_MANAGEMENT_URL_KEY),
             };
 
             this.ClientAuthConfig = new ClientAuthConfig

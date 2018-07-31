@@ -28,6 +28,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <summary>Get a list of devices</summary>
         /// <returns>List of devices</returns>
         [HttpGet]
+        [Authorize("CreateDevices")]
         public async Task<DeviceListApiModel> GetDevicesAsync([FromQuery] string query)
         {
             string continuationToken = string.Empty;
@@ -64,6 +65,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <param name="device">Device information</param>
         /// <returns>Device information</returns>
         [HttpPost]
+        [Authorize("CreateDevices")]
         public async Task<DeviceRegistryApiModel> PostAsync([FromBody] DeviceRegistryApiModel device)
         {
             return new DeviceRegistryApiModel(await this.devices.CreateAsync(device.ToServiceModel()));
@@ -74,6 +76,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <param name="device">Device information</param>
         /// <returns>Device information</returns>
         [HttpPut("{id}")]
+        [Authorize("UpdateDevices")]
         public async Task<DeviceRegistryApiModel> PutAsync(string id, [FromBody] DeviceRegistryApiModel device)
         {
             DevicePropertyDelegate updateListDelegate = new DevicePropertyDelegate(this.deviceProperties.UpdateListAsync);
@@ -83,6 +86,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <summary>Remove device</summary>
         /// <param name="id">Device Id</param>
         [HttpDelete("{id}")]
+        [Authorize("DeleteDevices")]
         public async Task DeleteAsync(string id)
         {
             await this.devices.DeleteAsync(id);
@@ -95,6 +99,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Controllers
         /// <param name="parameter">Device method parameters (passthrough to device)</param>
         /// <returns></returns>
         [HttpPost("{id}/methods")]
+        [Authorize("CreateJobs")]
         public async Task<MethodResultApiModel> InvokeDeviceMethodAsync(string id, [FromBody] MethodParameterApiModel parameter)
         {
             return new MethodResultApiModel(await this.deviceService.InvokeDeviceMethodAsync(id, parameter.ToServiceModel()));

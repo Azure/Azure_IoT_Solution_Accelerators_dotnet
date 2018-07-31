@@ -14,6 +14,9 @@ export PCS_IOTHUB_CONNSTRING="..."
 # The URL where Storage Adapter web service is listening
 export PCS_STORAGEADAPTER_WEBSERVICE_URL="http://127.0.0.1:9022/v1"
 
+# The URL where Authentication web service is listening
+export PCS_AUTH_WEBSERVICE_URL="http://127.0.0.1:9001/v1"
+
 # The OpenId tokens issuer URL, e.g. https://sts.windows.net/12000000-3400-5600-0000-780000000000/
 export PCS_AUTH_ISSUER="{enter the token issuer URL here}"
 

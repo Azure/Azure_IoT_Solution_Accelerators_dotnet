@@ -64,6 +64,8 @@ at least once. See specific instructions for IDE or command line setup below for
 more information. More information on environment variables
 [here](#configuration-and-environment-variables).
 
+* `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
+    * The url for the [Authentication service](https://github.com/Azure/pcs-auth-dotnet) from [Setup Dependencies](#setup-dependencies)
 * `PCS_IOTHUB_CONNSTRING` = {your Azure IoT Hub connection string from [Deploy Azure Services](#deploy-azure-services)}
     *  More information on where to find your IoT Hub connection string [here][iothub-connstring-blog].
 * `PCS_STORAGEADAPTER_WEBSERVICE_URL` = http://localhost:9022/v1
@@ -81,6 +83,7 @@ more information. More information on environment variables
    * If you already have VS Code installed, then ensure you have the [C# for Visual Studio Code (powered by OmniSharp)][omnisharp-url] extension installed.
 1. Open the solution in Visual Studio or VS Code
 1. Define the following environment variables. See [Configuration and Environment variables](#configuration-and-environment-variables) for detailed information for setting these for your enviroment.
+   1. `PCS_AUTH_WEBSERVICE_URL` = {authentication service endpoint}
    1. `PCS_IOTHUB_CONNSTRING` = {your Azure IoT Hub connection string}
    1. `PCS_STORAGEADAPTER_WEBSERVICE_URL` = {storage adapter service endpoint}
 1. Start the WebService project (e.g. press F5).
@@ -91,6 +94,7 @@ more information. More information on environment variables
 
 1. Make sure the [Prerequisites](#prerequisites) are set up.
 1. Set the following environment variables in your system. More information on environment variables [here](#configuration-and-environment-variables).
+	1. `PCS_AUTH_WEBSERVICE_URL` = {authentication service endpoint}
     1. `PCS_IOTHUB_CONNSTRING` = {your Azure IoT Hub connection string}
     1. `PCS_STORAGEADAPTER_WEBSERVICE_URL` = {storage adapter service endpoint}
 1. Use the scripts in the [scripts](scripts) folder for many frequent tasks:
