@@ -22,6 +22,7 @@ docker run -it -p 9005:9005 ^
     -e PCS_STORAGEADAPTER_WEBSERVICE_URL ^
     -e PCS_DEVICESIMULATION_WEBSERVICE_URL ^
     -e PCS_TELEMETRY_WEBSERVICE_URL ^
+    -e PCS_AUTH_WEBSERVICE_URL ^
     %DOCKER_IMAGE%:testing
 
 :: - - - - - - - - - - - - - -

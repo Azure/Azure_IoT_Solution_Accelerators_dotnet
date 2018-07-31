@@ -80,6 +80,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpPatch(Version.PATH + "/[controller]/{id}")]
+        [Authorize("UpdateAlarms")]
         public async Task<AlarmApiModel> PatchAsync(
             [FromRoute] string id,
             [FromBody] AlarmStatusApiModel body)
@@ -99,6 +100,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpDelete(Version.PATH + "/[controller]/{id}")]
+        [Authorize("DeleteAlarms")]
         public async Task DeleteAsync([FromRoute] string id)
         {
             if (id == null)
@@ -110,6 +112,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpPost(Version.PATH + "/[controller]!delete")]
+        [Authorize("DeleteAlarms")]
         public void Delete([FromBody] AlarmIdListApiModel alarmList)
         {
             if (alarmList.Items == null || !alarmList.Items.Any())

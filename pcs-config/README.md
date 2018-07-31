@@ -56,6 +56,7 @@ Run those services from the instructions in their READMEs in the following order
 1. [Storage Adapter Dotnet Microservice](https://github.com/Azure/pcs-storage-adapter-dotnet)
 1. [Telemetry Dotnet Microservice](https://github.com/Azure/device-telemetry-dotnet)
 1. [Device Simulation Dotnet Microservice](https://github.com/Azure/device-simulation-dotnet)
+1. [Authentication Microservice](https://github.com/Azure/pcs-auth-dotnet)
 
 ### 3. Environment variables required to run the service
 In order to run the service, some environment variables need to be
@@ -74,6 +75,9 @@ variables [here](#configuration-and-environment-variables).
   used for key value storage
 *  `PCS_AZUREMAPS_KEY` - the [Azure Maps](https://azure.microsoft.com/services/azure-maps/) 
   API Key. This can be set to "static" if you do not have one.
+* `PCS_AUTH_WEBSERVICE_URL` = the url for
+  the [Auth Webservice](https://github.com/Azure/pcs-auth-dotnet)
+  used for key value storage
 
 ## Running the service with Visual Studio or VS Code
 
@@ -91,6 +95,7 @@ variables [here](#configuration-and-environment-variables).
    1. `PCS_DEVICESIMULATION_WEBSERVICE_URL` = http://localhost:9003/v1
    1. `PCS_TELEMETRY_WEBSERVICE_URL` = http://localhost:9004/v1
    1. `PCS_AZUREMAPS_KEY` = static
+   1. `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
 1. Start the WebService project (e.g. press F5).
 1. Use an HTTP client such as [Postman][postman-url], to exercise the
    [RESTful API](https://github.com/Azure/pcs-config-dotnet/wiki/API-Specs).
@@ -105,6 +110,7 @@ More information on environment variables
    1. `PCS_DEVICESIMULATION_WEBSERVICE_URL` = http://localhost:9003/v1
    1. `PCS_TELEMETRY_WEBSERVICE_URL` = http://localhost:9004/v1
    1. `PCS_AZUREMAPS_KEY` = static
+   1. `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
 1. Use the scripts in the [scripts](scripts) folder for many frequent tasks:
    *  `build`: compile all the projects and run the tests.
    *  `compile`: compile all the projects.

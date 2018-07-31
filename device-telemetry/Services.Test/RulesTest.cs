@@ -288,6 +288,45 @@ namespace Services.Test
             Assert.Equal(newRuleId, rule.Id);
         }
 
+        /**
+        * On creating a new rule, new rule id should be returned
+        */
+        [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
+        public async Task CreateNewRule_ReturnsNewId()
+        {
+            // Arrange
+            Rule test = new Rule
+            {
+                Enabled = true
+            };
+
+            string newRuleId = "TESTRULEID" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            Rule resultRule = new Rule
+            {
+                Enabled = true,
+                Id = newRuleId
+            };
+
+            string ruleString = JsonConvert.SerializeObject(resultRule);
+
+            ValueApiModel result = new ValueApiModel
+            {
+                Data = ruleString,
+                ETag = "1234",
+                Key = newRuleId
+            };
+            
+
+            this.storageAdapter.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(result));
+
+            // Act
+            Rule rule = await this.rules.CreateAsync(test);
+
+            // Assert
+            Assert.Equal(newRuleId, rule.Id);
+        }
+
         private void ThereAreNoRulessInStorage()
         {
             this.rulesMock.Setup(x => x.GetListAsync(null, 0, LIMIT, null, false))

@@ -78,6 +78,8 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService
             // TODO: why is the HTTP client registered as a singleton? shouldn't be required
             var httpClient = new HttpClient(logger);
             builder.RegisterInstance(httpClient).As<IHttpClient>().SingleInstance();
+
+            builder.RegisterType<UserManagementClient>().As<IUserManagementClient>().SingleInstance();
         }
 
         private static void RegisterFactory(IContainer container)

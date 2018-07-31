@@ -95,6 +95,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
                         return new HttpResponse
                         {
                             StatusCode = response.StatusCode,
+                            IsSuccessStatusCode = response.IsSuccessStatusCode,
                             Headers = response.Headers,
                             Content = await response.Content.ReadAsStringAsync(),
                         };
@@ -119,6 +120,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
                     return new HttpResponse
                     {
                         StatusCode = 0,
+                        IsSuccessStatusCode = false,
                         Content = errorMessage
                     };
                 }

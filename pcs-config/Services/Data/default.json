@@ -5,7 +5,7 @@
       "DisplayName": "Chillers",
       "Conditions": [
         {
-          "Key": "properties.reported.Type",
+          "Key": "Properties.Reported.Type",
           "Operator": "EQ",
           "Value": "Chiller"
         }
@@ -16,7 +16,7 @@
       "DisplayName": "Prototyping devices",
       "Conditions": [
         {
-          "Key": "properties.reported.Type",
+          "Key": "Properties.Reported.Type",
           "Operator": "EQ",
           "Value": "Prototyping"
         }
@@ -27,7 +27,7 @@
       "DisplayName": "Engines",
       "Conditions": [
         {
-          "Key": "properties.reported.Type",
+          "Key": "Properties.Reported.Type",
           "Operator": "EQ",
           "Value": "Engine"
         }
@@ -38,7 +38,7 @@
       "DisplayName": "Trucks",
       "Conditions": [
         {
-          "Key": "properties.reported.Type",
+          "Key": "Properties.Reported.Type",
           "Operator": "EQ",
           "Value": "Truck"
         }
@@ -49,7 +49,7 @@
       "DisplayName": "Elevators",
       "Conditions": [
         {
-          "Key": "properties.reported.Type",
+          "Key": "Properties.Reported.Type",
           "Operator": "EQ",
           "Value": "Elevator"
         }

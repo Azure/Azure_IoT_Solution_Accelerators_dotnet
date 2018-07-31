@@ -2,7 +2,9 @@
 
 using System.Net;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Services.Test")]
 namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
 {
     public interface IHttpResponse
@@ -24,6 +26,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
         bool IsConflict { get; }
         bool IsServerError { get; }
         bool IsServiceUnavailable { get; }
+        bool IsSuccessStatusCode { get; }
     }
 
     public class HttpResponse : IHttpResponse
@@ -48,7 +51,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
         public HttpResponseHeaders Headers { get; internal set; }
         public string Content { get; internal set; }
 
-        public bool IsSuccess => (int) this.StatusCode >= 200 && (int) this.StatusCode <= 299;
+        public bool IsSuccess
+        {
+            get => (int) this.StatusCode >= 200 && (int) this.StatusCode <= 299;
+            set { throw new System.NotImplementedException(); }
+        }
+
         public bool IsError => (int) this.StatusCode >= 400 || (int) this.StatusCode == 0;
 
         public bool IsIncomplete
@@ -74,5 +82,6 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
         public bool IsConflict => (int) this.StatusCode == 409;
         public bool IsServerError => (int) this.StatusCode >= 500;
         public bool IsServiceUnavailable => (int) this.StatusCode == 503;
+        public bool IsSuccessStatusCode { get; internal set; }
     }
 }

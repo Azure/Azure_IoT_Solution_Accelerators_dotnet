@@ -51,6 +51,10 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Filters
             {
                 context.Result = this.GetResponse(HttpStatusCode.InternalServerError, context.Exception);
             }
+            else if (context.Exception is NoAuthorizationException)
+            {
+                context.Result = this.GetResponse(HttpStatusCode.Forbidden, context.Exception);
+            }
             else if (context.Exception != null)
             {
                 context.Result = this.GetResponse(HttpStatusCode.InternalServerError, context.Exception, true);

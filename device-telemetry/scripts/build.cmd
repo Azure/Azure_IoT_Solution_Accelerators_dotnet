@@ -67,6 +67,7 @@ IF "%1"=="--in-sandbox" GOTO :RunInSandbox
     :: Start the sandbox and execute the build script
     docker run -it ^
         -e "PCS_STORAGEADAPTER_WEBSERVICE_URL=http://127.0.0.1:9022/v1" ^
+        -e PCS_AUTH_WEBSERVICE_URL ^
         -e "PCS_TELEMETRY_DOCUMENTDB_CONNSTRING=%PCS_TELEMETRY_DOCUMENTDB_CONNSTRING%" ^
         -e "PCS_AUTH_ISSUER=%PCS_AUTH_ISSUER%" ^
         -e "PCS_AUTH_AUDIENCE=%PCS_AUTH_AUDIENCE%" ^

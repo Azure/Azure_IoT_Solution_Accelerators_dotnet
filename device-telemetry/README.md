@@ -45,6 +45,7 @@ Follow the instructions for
 
 This service depends on the following repository.
 1. [Storage Adapter Microservice](https://github.com/Azure/pcs-storage-adapter-dotnet)
+2. [Authentication Microservice](https://github.com/Azure/pcs-auth-dotnet)
 
 ### 3. Environment variables required to run the service
 In order to run the service, some environment variables need to be created
@@ -53,6 +54,7 @@ for more information. More information on environment variables
 [here](#configuration-and-environment-variables).
   * `PCS_TELEMETRY_DOCUMENTDB_CONNSTRING` = {your Azure Cosmos DB connection string}
   * `PCS_STORAGEADAPTER_WEBSERVICE_URL` = http://localhost:9022/v1
+  * `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
 
 ## Running the service with Visual Studio or VS Code
 
@@ -68,6 +70,7 @@ for more information. More information on environment variables
 1. Define the following environment variables. See [Configuration and Environment variables](#configuration-and-environment-variables) for detailed information for setting these for your enviroment.
    1. `PCS_TELEMETRY_DOCUMENTDB_CONNSTRING` = {your Azure Document Db connection string}
    1. `PCS_STORAGEADAPTER_WEBSERVICE_URL` = http://localhost:9022/v1
+   1. `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
    1. etc...
 1. Start the WebService project (e.g. press F5).
 1. Using an HTTP client like [Postman][postman-url], use the 
@@ -81,6 +84,7 @@ More information on environment variables
 [here](#configuration-and-environment-variables).
     1. `PCS_TELEMETRY_DOCUMENTDB_CONNSTRING` = {your Azure Cosmos DB connection string}
     1. `PCS_STORAGEADAPTER_WEBSERVICE_URL` = http://localhost:9022/v1
+    1. `PCS_AUTH_WEBSERVICE_URL` = http://localhost:9001/v1
 1. Use the scripts in the [scripts](scripts) folder for many frequent tasks:
    * `build`: compile all the projects and run the tests.
    * `compile`: compile all the projects.

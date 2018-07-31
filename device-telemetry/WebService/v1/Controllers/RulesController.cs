@@ -51,6 +51,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpPost]
+        [Authorize("CreateRules")]
         public async Task<RuleApiModel> PostAsync(
             [FromQuery] string template,
             [FromBody] RuleApiModel rule)
@@ -73,6 +74,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize("UpdateRules")]
         public async Task<RuleApiModel> PutAsync(
             [FromRoute] string id,
             [FromBody] RuleApiModel rule)
@@ -90,6 +92,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize("DeleteRules")]
         public async Task DeleteAsync([FromRoute] string id)
         {
             await this.ruleService.DeleteAsync(id);

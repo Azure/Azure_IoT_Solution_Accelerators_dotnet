@@ -31,18 +31,21 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.v1.Controllers
         }
 
         [HttpPost]
+        [Authorize("CreateDeviceGroups")]
         public async Task<DeviceGroupApiModel> CreateAsync([FromBody] DeviceGroupApiModel input)
         {
             return new DeviceGroupApiModel(await this.storage.CreateDeviceGroupAsync(input.ToServiceModel()));
         }
 
         [HttpPut("{id}")]
+        [Authorize("UpdateDeviceGroups")]
         public async Task<DeviceGroupApiModel> UpdateAsync(string id, [FromBody] DeviceGroupApiModel input)
         {
             return new DeviceGroupApiModel(await this.storage.UpdateDeviceGroupAsync(id, input.ToServiceModel(), input.ETag));
         }
 
         [HttpDelete("{id}")]
+        [Authorize("DeleteDeviceGroups")]
         public async Task DeleteAsync(string id)
         {
             await this.storage.DeleteDeviceGroupAsync(id);

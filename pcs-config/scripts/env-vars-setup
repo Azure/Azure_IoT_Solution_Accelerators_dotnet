@@ -21,3 +21,5 @@ export PCS_DEVICESIMULATION_WEBSERVICE_URL="http://127.0.0.1:9003/v1"
 # The Azure Maps Api key
 export PCS_AZUREMAPS_KEY="static"
 
+# The URL where Authentication web service is listening
+export PCS_AUTH_WEBSERVICE_URL="http://127.0.0.1:9001/v1"

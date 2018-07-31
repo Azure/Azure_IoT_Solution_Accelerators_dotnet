@@ -23,6 +23,7 @@ echo Starting Telemetry service...
 docker run -it -p 9004:9004 ^
     -e PCS_TELEMETRY_DOCUMENTDB_CONNSTRING ^
     -e PCS_STORAGEADAPTER_WEBSERVICE_URL ^
+    -e PCS_AUTH_WEBSERVICE_URL ^
     -e PCS_AUTH_ISSUER ^
     -e PCS_AUTH_AUDIENCE ^
     %DOCKER_IMAGE%:testing

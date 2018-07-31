@@ -45,6 +45,9 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "audience";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clock_skew_seconds";
 
+        private const string USER_MANAGEMENT_KEY = "UserManagementService:";
+        private const string USER_MANAGEMENT_URL_KEY = USER_MANAGEMENT_KEY + "webservice_url";
+
         public int Port { get; }
         public IServicesConfig ServicesConfig { get; }
         public IClientAuthConfig ClientAuthConfig { get; }
@@ -59,7 +62,8 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
                 DeviceSimulationApiUrl = configData.GetString(DEVICE_SIMULATION_URL_KEY),
                 TelemetryApiUrl = configData.GetString(TELEMETRY_URL_KEY),
                 SeedTemplate = configData.GetString(SEED_TEMPLATE_KEY),
-                AzureMapsKey = configData.GetString(AZURE_MAPS_KEY)
+                AzureMapsKey = configData.GetString(AZURE_MAPS_KEY),
+                UserManagementApiUrl = configData.GetString(USER_MANAGEMENT_URL_KEY)
             };
 
             this.ClientAuthConfig = new ClientAuthConfig

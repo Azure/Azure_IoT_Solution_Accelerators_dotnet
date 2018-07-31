@@ -251,7 +251,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
             Rule newRule = this.Deserialize(result.Data);
             newRule.ETag = result.ETag;
 
-            if (newRule.Id == null) newRule.Id = result.Key;
+            if (string.IsNullOrEmpty(newRule.Id)) newRule.Id = result.Key;
 
             return newRule;
         }

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Diagnostics;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.External;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -53,12 +54,14 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
         private TokenValidationParameters tokenValidationParams;
         private readonly bool authRequired;
         private bool tokenValidationInitialized;
+        private readonly IUserManagementClient userManagementClient;
 
         public AuthMiddleware(
             // ReSharper disable once UnusedParameter.Local
             RequestDelegate requestDelegate, // Required by ASP.NET
             IConfigurationManager<OpenIdConnectConfiguration> openIdCfgMan,
             IClientAuthConfig config,
+            IUserManagementClient userManagementClient,
             ILogger log)
         {
             this.requestDelegate = requestDelegate;
@@ -67,6 +70,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
             this.log = log;
             this.authRequired = config.AuthRequired;
             this.tokenValidationInitialized = false;
+            this.userManagementClient = userManagementClient;
 
             // This will show in development mode, or in case auth is turned off
             if (!this.authRequired)
@@ -103,6 +107,9 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
             var header = string.Empty;
             var token = string.Empty;
 
+            // Store this setting to skip validating authorization in the controller if enabled
+            context.Request.SetAuthRequired(this.config.AuthRequired);
+
             if (!context.Request.Headers.ContainsKey(EXT_RESOURCES_HEADER))
             {
                 // This is a service to service request running in the private
@@ -113,8 +120,11 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
 
                 // Call the next delegate/middleware in the pipeline
                 this.log.Debug("Skipping auth for service to service request", () => { });
+                context.Request.SetExternalRequest(false);
                 return this.requestDelegate(context);
             }
+
+            context.Request.SetExternalRequest(true);
 
             if (!this.authRequired)
             {
@@ -180,6 +190,20 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
                     // Store the user info in the request context, so the authorization
                     // header doesn't need to be parse again later in the User controller.
                     context.Request.SetCurrentUserClaims(jwtToken.Claims);
+
+                    // Store the user allowed actions in the request context to validate
+                    // authorization later in the controller.
+                    var userObjectId = context.Request.GetCurrentUserObjectId();
+                    var roles = context.Request.GetCurrentUserRoleClaim().ToList();
+                    if (roles.Any())
+                    {
+                        var allowedActions = this.userManagementClient.GetAllowedActionsAsync(userObjectId, roles).Result;
+                        context.Request.SetCurrentUserAllowedActions(allowedActions);
+                    }
+                    else
+                    {
+                        this.log.Error("JWT token doesn't include any role claims.", () => { });
+                    }
 
                     return true;
                 }

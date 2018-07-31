@@ -59,6 +59,7 @@ IF "%1"=="--in-sandbox" GOTO :RunInSandbox
 
     :: Start the sandbox and execute the build script
     docker run ^
+        -e PCS_AUTH_WEBSERVICE_URL ^
         -v %PCS_CACHE%\sandbox\.config:/root/.config ^
         -v %PCS_CACHE%\sandbox\.dotnet:/root/.dotnet ^
         -v %PCS_CACHE%\sandbox\.nuget:/root/.nuget ^
