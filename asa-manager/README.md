@@ -1,7 +1,7 @@
 [![Build][build-badge]][build-url]
 [![Issues][issues-badge]][issues-url]
 [![Gitter][gitter-badge]][gitter-url]
-
+ 
 # Azure Stream Analytics Manager Overview
 
 This service allows the management of Azure Stream Analytics (ASA) jobs,
