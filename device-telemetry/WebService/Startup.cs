@@ -1,10 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Threading;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.NotificationSystem;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Runtime;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +18,9 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService
 {
     public class Startup
     {
+        private readonly CancellationTokenSource agentsRunState;
+        private IAgent notificationSystemAgent;
+
         // Initialized in `Startup`
         public IConfigurationRoot Configuration { get; }
 
@@ -29,6 +34,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService
                 .SetBasePath(env.ContentRootPath)
                 .AddIniFile("appsettings.ini", optional: false, reloadOnChange: true);
             this.Configuration = builder.Build();
+            this.agentsRunState = new CancellationTokenSource();
         }
 
         // This is where you register dependencies, add services to the
@@ -72,9 +78,24 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService
 
             app.UseMvc();
 
+            // Start agent threads
+            appLifetime.ApplicationStarted.Register(this.StartAgents);
+            appLifetime.ApplicationStopping.Register(this.StopAgents);
+
             // If you want to dispose of resources that have been resolved in the
             // application container, register for the "ApplicationStopped" event.
             appLifetime.ApplicationStopped.Register(() => this.ApplicationContainer.Dispose());
+        }
+
+        private void StartAgents()
+        {
+            this.notificationSystemAgent = this.ApplicationContainer.Resolve<IAgent>();
+            this.notificationSystemAgent.RunAsync(this.agentsRunState.Token);
+        }
+
+        private void StopAgents()
+        {
+            this.agentsRunState.Cancel();
         }
 
         private void PrintBootstrapInfo(IContainer container)

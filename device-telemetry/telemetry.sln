@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{82
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		CONTRIBUTING.md = CONTRIBUTING.md
-		telemetry.sln.DotSettings = telemetry.sln.DotSettings
 		LICENSE = LICENSE
 		README.md = README.md
+		telemetry.sln.DotSettings = telemetry.sln.DotSettings
 		version = version
 	EndProjectSection
 EndProject
@@ -73,11 +73,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8BAA
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B3A8B713-DB43-4201-B832-ACF7D81B4843}"
-ProjectSection(SolutionItems) = preProject
-	.github\CODEOWNERS = .github\CODEOWNERS
-	.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
-	.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		.github\CODEOWNERS = .github\CODEOWNERS
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{89DE7432-7F2A-4736-8D8D-9BC704223EDA}"
+	ProjectSection(SolutionItems) = preProject
+		ENVIRONMENT_VARIABLES.md = ENVIRONMENT_VARIABLES.md
+		LOGIC_APP.md = LOGIC_APP.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +117,11 @@ Global
 		{DB8AF4E5-71A1-4650-A881-9F08FCB53DAA} = {7357A079-B54D-490F-AA91-1B7BDAFE5E3F}
 		{8BAA54A8-9C80-4446-83DD-CEBBC7B7BCD2} = {DB8AF4E5-71A1-4650-A881-9F08FCB53DAA}
 		{B3A8B713-DB43-4201-B832-ACF7D81B4843} = {8289AFAE-0933-40EF-9D19-6FFA2DB04837}
+		{89DE7432-7F2A-4736-8D8D-9BC704223EDA} = {8289AFAE-0933-40EF-9D19-6FFA2DB04837}
+		{7F84A0F8-E9EB-4917-9441-F841DEC60301} = {89DE7432-7F2A-4736-8D8D-9BC704223EDA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {363629C9-36FD-4383-AE91-47D40C3D78C3}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

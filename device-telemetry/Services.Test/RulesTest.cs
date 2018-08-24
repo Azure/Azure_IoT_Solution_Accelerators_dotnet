@@ -47,7 +47,7 @@ namespace Services.Test
             var list = await this.rulesMock.Object.GetListAsync(null, 0, LIMIT, null, false);
 
             // Assert
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
         }
 
         [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
@@ -61,6 +61,18 @@ namespace Services.Test
 
             // Assert
             Assert.NotEmpty(list);
+
+            // Assert action has been read.
+            bool isActionReadCorrect = true;
+            foreach (Rule rule in list)
+            {
+                if (rule.Actions == null)
+                {
+                    isActionReadCorrect = false;
+                    break;
+                }
+                Assert.True(isActionReadCorrect);
+            }
         }
 
         /**
@@ -315,7 +327,7 @@ namespace Services.Test
                 ETag = "1234",
                 Key = newRuleId
             };
-            
+
 
             this.storageAdapter.Setup(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(result));
@@ -345,6 +357,15 @@ namespace Services.Test
                 }
             };
 
+            var sampleActions = new List<IActionItem>
+            {
+                new EmailActionItem(Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models.Type.Email, new Dictionary<string, object>()
+                    {
+                        {"email", new Newtonsoft.Json.Linq.JArray(){"sampleEmail@gmail.com", "sampleEmail2@gmail.com"}},
+                        {"subject", "Test Email"}
+                    })
+            };
+
             var sampleRules = new List<Rule>
             {
                 new Rule()
@@ -354,7 +375,8 @@ namespace Services.Test
                     Description = "Sample description 1",
                     GroupId = "Prototyping devices",
                     Severity = SeverityType.Critical,
-                    Conditions = sampleConditions
+                    Conditions = sampleConditions,
+                    Actions = sampleActions
                 },
                 new Rule()
                 {
@@ -363,7 +385,8 @@ namespace Services.Test
                     Description = "Sample description 2",
                     GroupId =  "Prototyping devices",
                     Severity =  SeverityType.Warning,
-                    Conditions =  sampleConditions
+                    Conditions = sampleConditions,
+                    Actions = sampleActions
                 }
             };
 

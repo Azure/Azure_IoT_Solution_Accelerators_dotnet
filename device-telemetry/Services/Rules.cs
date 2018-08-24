@@ -345,7 +345,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
         {
             try
             {
-               return JsonConvert.DeserializeObject<Rule>(jsonRule);
+                return JsonConvert.DeserializeObject<Rule>(jsonRule);
             }
             catch (Exception e)
             {
