@@ -69,7 +69,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
             }
 
             this.log.Info("Seed begin", () => { });
-            await this.SeedAsync(this.config.SeedTemplate);
+            await this.SeedAsync();
             this.log.Info("Seed end", () => { });
 
             await this.SetCompletedFlagAsync();
@@ -95,27 +95,35 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
             await this.storageClient.UpdateAsync(SEED_COLLECTION_ID, COMPLETED_FLAG_KEY, "true", "*");
         }
 
-        private async Task SeedAsync(string template)
+        private async Task SeedAsync()
         {
-            string content;
-
-            var root = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var file = Path.Combine(root, "Data", $"{template}.json");
-            if (!File.Exists(file))
+            if (string.Equals(this.config.SolutionType, "devicesimulation", StringComparison.OrdinalIgnoreCase))
             {
-                // ToDo: Check if `template` is a valid URL and try to load the content
-
-                throw new ResourceNotFoundException($"Template {template} does not exist");
+                await this.SeedDeviceSimulationAsync();
             }
             else
             {
-                content = File.ReadAllText(file);
-            }
+                var template = this.config.SeedTemplate;
+                string content;
+                var root = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+                var file = Path.Combine(root, "Data", $"{template}.json");
+                if (!File.Exists(file))
+                {
+                    // ToDo: Check if `template` is a valid URL and try to load the content
 
-            await this.SeedSingleTemplateAsync(content);
+                    throw new ResourceNotFoundException($"Template {template} does not exist");
+                }
+                else
+                {
+                    content = File.ReadAllText(file);
+                }
+
+                await this.SeedSingleTemplateForRMAsync(content);
+            }
         }
 
-        private async Task SeedSingleTemplateAsync(string content)
+        // Seed single template for Remote Monitoring solution
+        private async Task SeedSingleTemplateForRMAsync(string content)
         {
             Template template;
 
@@ -173,7 +181,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
 
             try
             {
-                var simulationModel = await this.simulationClient.GetSimulationAsync();
+                var simulationModel = await this.simulationClient.GetDefaultSimulationAsync();
 
                 if (simulationModel != null)
                 {
@@ -188,7 +196,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                     };
 
                     simulationModel.DeviceModels = template.DeviceModels.ToList();
-                    await this.simulationClient.UpdateSimulation(simulationModel);
+                    await this.simulationClient.UpdateSimulationAsync(simulationModel);
                 }
             }
             catch (Exception ex)
@@ -197,5 +205,29 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                 throw;
             }
         }
+
+        // Seed single template for Device Simulation solution
+        private async Task SeedDeviceSimulationAsync()
+        {
+            try
+            {
+                var simulationModel = await this.simulationClient.GetDefaultSimulationAsync();
+
+                if (simulationModel != null)
+                {
+                    this.log.Info("Skip seed simulation since there is already one simulation", () => new { simulationModel });
+                }
+                else
+                {
+                    await this.simulationClient.CreateDefaultSimulationAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.log.Error("Failed to seed default simulation", () => new { ex.Message });
+                throw;
+            }
+        }
+
     }
 }

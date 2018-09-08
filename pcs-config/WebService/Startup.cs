@@ -59,7 +59,8 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService
             IHostingEnvironment env,
             ILoggerFactory loggerFactory,
             ICorsSetup corsSetup,
-            IApplicationLifetime appLifetime)
+            IApplicationLifetime appLifetime,
+            IConfig config)
         {
             loggerFactory.AddConsole(this.Configuration.GetSection("Logging"));
 
@@ -76,7 +77,10 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService
             // application container, register for the "ApplicationStopped" event.
             appLifetime.ApplicationStopped.Register(() => this.ApplicationContainer.Dispose());
 
-            appLifetime.ApplicationStarted.Register(() => this.ApplicationContainer.Resolve<IRecurringTasks>().Run());
+            if (!string.Equals(this.config.ServicesConfig.SolutionType, "devicesimulation-nohub", StringComparison.OrdinalIgnoreCase))
+            {
+                appLifetime.ApplicationStarted.Register(() => this.ApplicationContainer.Resolve<IRecurringTasks>().Run());
+            }
         }
 
         private void PrintBootstrapInfo(IContainer container)
