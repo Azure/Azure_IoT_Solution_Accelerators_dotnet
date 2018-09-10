@@ -1,0 +1,36 @@
+﻿{
+  "Simulations": [
+    {
+      "Id": "1",
+      "Name": "Sample Simple Simulation",
+      "Etag": "*",
+      "Enabled": false,
+      "DeviceModels": [
+        {
+          "Id": "chiller-01",
+          "Count": 1
+        }
+      ]
+    },
+    {
+      "Id": "2",
+      "Name": "Sample Multiple Devices",
+      "Etag": "*",
+      "Enabled": false,
+      "DeviceModels": [
+        {
+          "Id": "chiller-01",
+          "Count": 1
+        },
+        {
+          "Id": "elevator-01",
+          "Count": 1
+        },
+        {
+          "Id": "engine-01",
+          "Count": 1
+        }
+      ]
+    }
+  ]
+}

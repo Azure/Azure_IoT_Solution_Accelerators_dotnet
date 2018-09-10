@@ -14,7 +14,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services.Models
         [JsonProperty("Rules")]
         public IEnumerable<RuleApiModel> Rules;
 
-        [JsonProperty("DeviceModels")]
-        public IEnumerable<DeviceModelRef> DeviceModels;
+        [JsonProperty("Simulations")]
+        public IEnumerable<SimulationApiModel> Simulations;
     }
 }

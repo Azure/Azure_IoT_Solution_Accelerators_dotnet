@@ -39,7 +39,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services.External
 
         public async Task UpdateSimulationAsync(SimulationApiModel model)
         {
-            await this.httpClient.PutAsync($"{this.serviceUri}/simulations/{DEFAULT_SIMULATION_ID}", $"Simulation {DEFAULT_SIMULATION_ID}", model);
+            await this.httpClient.PutAsync($"{this.serviceUri}/simulations/{model.Id}", $"Simulation {model.Id}", model);
         }
     }
 }

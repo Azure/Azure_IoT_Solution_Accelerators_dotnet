@@ -108,38 +108,15 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
             }
             else
             {
-                var template = this.config.SeedTemplate;
-                string content;
-                var root = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                var file = Path.Combine(root, "Data", $"{template}.json");
-                if (!File.Exists(file))
-                {
-                    // ToDo: Check if `template` is a valid URL and try to load the content
-
-                    throw new ResourceNotFoundException($"Template {template} does not exist");
-                }
-                else
-                {
-                    content = File.ReadAllText(file);
-                }
-
-                await this.SeedSingleTemplateForRMAsync(content);
+                await this.SeedSingleTemplateAsync();
             }
         }
 
         // Seed single template for Remote Monitoring solution
-        private async Task SeedSingleTemplateForRMAsync(string content)
+        private async Task SeedSingleTemplateAsync()
         {
-            Template template;
-
-            try
-            {
-                template = JsonConvert.DeserializeObject<Template>(content);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidInputException("Failed to parse template", ex);
-            }
+            var templateName = this.config.SeedTemplate;
+            var template = this.GetSeedContent(templateName);
 
             if (template.Groups.Select(g => g.Id).Distinct().Count() != template.Groups.Count())
             {
@@ -194,14 +171,10 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                 }
                 else
                 {
-                    simulationModel = new SimulationApiModel
+                    foreach (var simulation in template.Simulations)
                     {
-                        Id = "1",
-                        Etag = "*"
-                    };
-
-                    simulationModel.DeviceModels = template.DeviceModels.ToList();
-                    await this.simulationClient.UpdateSimulationAsync(simulationModel);
+                        await this.simulationClient.UpdateSimulationAsync(simulation);
+                    }
                 }
             }
             catch (Exception ex)
@@ -224,15 +197,49 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                 }
                 else
                 {
-                    await this.simulationClient.CreateDefaultSimulationAsync();
+                    var template = this.GetSeedContent("device-simulation-template");
+
+                    foreach (var simulation in template.Simulations)
+                    {
+                        await this.simulationClient.UpdateSimulationAsync(simulation);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                this.log.Error("Failed to seed default simulation", () => new { ex.Message });
+                this.log.Error("Failed to seed default simulations", () => new { ex.Message });
                 throw;
             }
         }
 
+        private Template GetSeedContent(string templateName)
+        {
+            string content;
+            var root = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var file = Path.Combine(root, "Data", $"{templateName}.json");
+            if (!File.Exists(file))
+            {
+                // ToDo: Check if `template` is a valid URL and try to load the content
+
+                throw new ResourceNotFoundException($"Template {templateName} does not exist");
+            }
+            else
+            {
+                content = File.ReadAllText(file);
+            }
+
+            Template template;
+
+            try
+            {
+                template = JsonConvert.DeserializeObject<Template>(content);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidInputException("Failed to parse template", ex);
+            }
+
+            return template;
+        }
     }
 }
