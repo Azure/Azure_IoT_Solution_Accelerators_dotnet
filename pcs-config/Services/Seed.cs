@@ -56,7 +56,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
 
         public async Task TrySeedAsync()
         {
-            if (string.Equals(this.config.SolutionType, "devicesimulation-nohub", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrEmpty(this.config.SeedTemplate))
             {
                 return;
             }
@@ -102,7 +102,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
 
         private async Task SeedAsync()
         {
-            if (string.Equals(this.config.SolutionType, "devicesimulation", StringComparison.OrdinalIgnoreCase))
+            if (this.config.SolutionType.IndexOf("devicesimulation", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 await this.SeedDeviceSimulationAsync();
             }
@@ -115,8 +115,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
         // Seed single template for Remote Monitoring solution
         private async Task SeedSingleTemplateAsync()
         {
-            var templateName = this.config.SeedTemplate;
-            var template = this.GetSeedContent(templateName);
+            var template = this.GetSeedContent(this.config.SeedTemplate);
 
             if (template.Groups.Select(g => g.Id).Distinct().Count() != template.Groups.Count())
             {
@@ -197,7 +196,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                 }
                 else
                 {
-                    var template = this.GetSeedContent("device-simulation-template");
+                    var template = this.GetSeedContent(this.config.SeedTemplate);
 
                     foreach (var simulation in template.Simulations)
                     {
