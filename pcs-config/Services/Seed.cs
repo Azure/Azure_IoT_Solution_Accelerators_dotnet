@@ -56,6 +56,11 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
 
         public async Task TrySeedAsync()
         {
+            if (string.Equals(this.config.SolutionType, "devicesimulation-nohub", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             if (!await this.mutex.EnterAsync(SEED_COLLECTION_ID, MUTEX_KEY, this.mutexTimeout))
             {
                 this.log.Info("Seed skipped (conflict)", () => { });
