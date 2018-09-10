@@ -7,8 +7,8 @@
       "Enabled": false,
       "DeviceModels": [
         {
-          "Id": "chiller-01",
-          "Count": 1
+          "Id": "truck-01",
+          "Count": 10
         }
       ]
     },
@@ -20,15 +20,11 @@
       "DeviceModels": [
         {
           "Id": "chiller-01",
-          "Count": 1
+          "Count": 50
         },
         {
           "Id": "elevator-01",
-          "Count": 1
-        },
-        {
-          "Id": "engine-01",
-          "Count": 1
+          "Count": 10
         }
       ]
     }
