@@ -90,18 +90,24 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http
                 {
                     using (var response = await client.SendAsync(httpRequest))
                     {
+                        this.log.Debug("Response", () => new { response });
+
                         if (request.Options.EnsureSuccess) response.EnsureSuccessStatusCode();
+
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        this.log.Debug("Response", () => new { content });
 
                         return new HttpResponse
                         {
                             StatusCode = response.StatusCode,
                             IsSuccessStatusCode = response.IsSuccessStatusCode,
                             Headers = response.Headers,
-                            Content = await response.Content.ReadAsStringAsync(),
+                            Content = content
                         };
                     }
                 }
-                catch (HttpRequestException e)
+                catch (Exception e)
                 {
                     var errorMessage = e.Message;
                     if (e.InnerException != null)

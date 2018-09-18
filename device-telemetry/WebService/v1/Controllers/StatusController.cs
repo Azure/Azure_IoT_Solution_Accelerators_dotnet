@@ -51,6 +51,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
             var errors = new List<string>();
 
             // Check access to Storage Adapter
+            log.Debug("Sending ping", () => new { });
             var storageAdapterStatus = await this.storageAdapter.PingAsync();
             if (!storageAdapterStatus.Item1)
             {
@@ -58,25 +59,28 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
                 errors.Add("Unable to use key value storage");
             }
 
+            log.Debug("Sending ping to cosmosdb", () => new { });
             // Check connection to CosmosDb
             var cosmosDbStatus = this.cosmosDb.Ping();
+            log.Debug("Response cosmosdb", () => new { cosmosDbStatus  });
             if (!cosmosDbStatus.Item1)
             {
                 statusIsOk = false;
                 errors.Add("Unable to use storage");
             }
-
+            log.Debug("Joining errors", () => new { });
             // Prepare status message
             if (!statusIsOk)
             {
                 statusMsg = string.Join(";", errors);
             }
-
+            log.Debug("Joined errors ", () => new { });
             // Prepare response
             var result = new StatusApiModel(statusIsOk, statusMsg);
             result.Dependencies.Add("Key Value Storage", storageAdapterStatus.Item2);
             result.Dependencies.Add("Storage", cosmosDbStatus.Item2);
 
+            log.Debug("TSI ping ", () => new { });
             // Add Time Series Dependencies if needed
             if (this.config.ServicesConfig.StorageType.Equals(
                 TIME_SERIES_KEY,
@@ -84,19 +88,23 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Controllers
             {
                 // Check connection to Time Series Insights
                 var timeSeriesStatus = await this.timeSeriesClient.PingAsync();
+                log.Debug("TSI response ", () => new { timeSeriesStatus });
                 if (!timeSeriesStatus.Item1)
                 {
                     statusIsOk = false;
                     errors.Add("Unable to use Time Series Insights");
                 }
+                log.Debug("TSI response end ", () => new {  });
                 result.Dependencies.Add("TimeSeries", timeSeriesStatus.Item2);
 
+                log.Debug("TSI Data ", () => new { });
                 // Add Time Series Insights explorer url
                 var timeSeriesFqdn = this.config.ServicesConfig.TimeSeriesFqdn;
                 var environmentId = timeSeriesFqdn.Substring(0, timeSeriesFqdn.IndexOf(TIME_SERIES_EXPLORER_URL_SEPARATOR_CHAR));
                 var explorerUrl = this.config.ServicesConfig.TimeSeriesExplorerUrl +
                     "?environmentId=" + environmentId +
                     "&tid=" + this.config.ServicesConfig.ActiveDirectoryTenant;
+                log.Debug("TSI response end ", () => new { explorerUrl });
                 result.Properties.Add(TIME_SERIES_EXPLORER_URL_KEY, explorerUrl);
             }
 

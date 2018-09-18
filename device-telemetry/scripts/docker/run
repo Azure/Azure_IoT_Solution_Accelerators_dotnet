@@ -12,10 +12,10 @@ source "$APP_HOME/scripts/.functions.sh"
 run_container() {
     check_dependency_docker
 
-    $APP_HOME/scripts/env-vars-check
+#    $APP_HOME/scripts/env-vars-check
 
     echo "Starting Telemetry service..."
-    docker run -it -p 9004:9004 \
+    docker run -i -p 9004:9004 \
         -e PCS_TELEMETRY_DOCUMENTDB_CONNSTRING \
         -e PCS_STORAGEADAPTER_WEBSERVICE_URL \
         -e PCS_AUTH_WEBSERVICE_URL \

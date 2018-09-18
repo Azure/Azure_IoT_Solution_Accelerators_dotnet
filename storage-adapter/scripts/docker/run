@@ -17,7 +17,7 @@ run_container() {
     # Some settings are used to connect to an external dependency, e.g. Azure IoT Hub and IoT Hub Manager API
     # Depending on which settings and which dependencies are needed, edit the list of variables
     echo "Starting Storage Adapter ..."
-    docker run -it -p 9022:9022 \
+    docker run -i -p 9022:9022 \
         -e PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING \
         "$DOCKER_IMAGE:testing"
 }

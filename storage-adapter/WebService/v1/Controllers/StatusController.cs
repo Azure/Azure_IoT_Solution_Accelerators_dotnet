@@ -23,7 +23,9 @@ namespace Microsoft.Azure.IoTSolutions.StorageAdapter.WebService.v1.Controllers
             var isOk = true;
 
             this.log.Info("Service status request", () => new { Healthy = isOk });
-            return new StatusApiModel(isOk, "Alive and well");
+            var resp = new StatusApiModel(isOk, "Alive and well");
+            log.Debug("Status Response", () => new { resp });
+            return resp;
         }
     }
 }
