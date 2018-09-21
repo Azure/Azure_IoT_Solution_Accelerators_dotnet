@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Azure.IoTSolutions.AsaManager.Services.Models;
 using Newtonsoft.Json;
 
@@ -93,6 +94,12 @@ namespace Microsoft.Azure.IoTSolutions.AsaManager.TelemetryRulesAgent.Models
             internal string Value { get; set; }
         }
 
+        private struct ActionItem
+        {
+            internal string ActionType { get; set; }
+            internal IDictionary<string, object> Parameters { get; set; }
+        }
+
         [JsonProperty("Id")]
         public string Id { get; set; }
 
@@ -114,6 +121,9 @@ namespace Microsoft.Azure.IoTSolutions.AsaManager.TelemetryRulesAgent.Models
         [JsonProperty("Fields")]
         public List<string> Fields { get; set; }
 
+        [JsonProperty("Actions")]
+        public List<IActionApiModel> Actions { get; set; }
+
         [JsonProperty("__rulefilterjs")]
         public string RuleFilterJs => this.ConditionsToJavascript();
 
@@ -121,6 +131,7 @@ namespace Microsoft.Azure.IoTSolutions.AsaManager.TelemetryRulesAgent.Models
         {
             this.conditions = new List<Condition>();
             this.Fields = new List<string>();
+            this.Actions = new List<IActionApiModel>();
         }
 
         public AsaRefDataRule(RuleApiModel rule) : this()
@@ -148,6 +159,7 @@ namespace Microsoft.Azure.IoTSolutions.AsaManager.TelemetryRulesAgent.Models
                 this.conditions.Add(condition);
                 this.Fields.Add(c.Field);
             }
+            this.Actions = rule.Actions;
         }
 
         private static string GetAggregationWindowValue(string calculation, long timePeriod)

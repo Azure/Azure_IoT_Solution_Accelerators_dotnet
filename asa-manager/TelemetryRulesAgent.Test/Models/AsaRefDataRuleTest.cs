@@ -76,13 +76,14 @@ namespace TelemetryRulesAgent.Test.Models
             // Assert
             var expectedJSON = JsonConvert.SerializeObject(new
             {
-                Id = (string) null,
-                Name = (string) null,
-                Description = (string) null,
-                GroupId = (string) null,
-                Severity = (string) null,
-                AggregationWindow = (string) null,
+                Id = (string)null,
+                Name = (string)null,
+                Description = (string)null,
+                GroupId = (string)null,
+                Severity = (string)null,
+                AggregationWindow = (string)null,
                 Fields = new string[] { },
+                Actions = new List<object>() { },
                 __rulefilterjs = "return true;"
             });
             Assert.Equal(expectedJSON, json);
@@ -100,6 +101,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Description = Guid.NewGuid().ToString(),
                 GroupId = Guid.NewGuid().ToString(),
                 Severity = Guid.NewGuid().ToString(),
+                Actions = new List<IActionApiModel>() { GetSampleActionData() },
                 Calculation = SOURCE_NO_AGGREGATION
             };
 
@@ -118,6 +120,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = rule.Severity,
                 AggregationWindow = ASA_AGGREGATION_NONE,
                 Fields = new string[] { },
+                Actions = rule.Actions,
                 __rulefilterjs = "return true;"
             });
             Assert.Equal(expectedJSON, json);
@@ -141,6 +144,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Description = Guid.NewGuid().ToString(),
                 GroupId = Guid.NewGuid().ToString(),
                 Severity = Guid.NewGuid().ToString(),
+                Actions = new List<IActionApiModel>() { GetSampleActionData() },
                 Calculation = SOURCE_AVG_AGGREGATOR,
                 TimePeriod = sourceAggr
             };
@@ -160,6 +164,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = rule.Severity,
                 AggregationWindow = asaAggr,
                 Fields = new string[] { },
+                Actions = rule.Actions,
                 __rulefilterjs = "return true;"
             });
             Assert.Equal(expectedJSON, json);
@@ -193,6 +198,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Description = Guid.NewGuid().ToString(),
                 GroupId = Guid.NewGuid().ToString(),
                 Severity = Guid.NewGuid().ToString(),
+                Actions = new List<IActionApiModel>() { GetSampleActionData() },
                 Calculation = SOURCE_NO_AGGREGATION,
                 Conditions = new List<ConditionApiModel>
                 {
@@ -235,6 +241,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = rule.Severity,
                 AggregationWindow = ASA_AGGREGATION_NONE,
                 Fields = rule.Conditions.Select(x => x.Field),
+                Actions = rule.Actions,
                 __rulefilterjs = $"return ({cond1} && {cond2} && {cond3}) ? true : false;"
             });
             Assert.Equal(expectedJSON, json);
@@ -268,6 +275,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Description = Guid.NewGuid().ToString(),
                 GroupId = Guid.NewGuid().ToString(),
                 Severity = Guid.NewGuid().ToString(),
+                Actions = new List<IActionApiModel>() { GetSampleActionData() },
                 Calculation = SOURCE_AVG_AGGREGATOR,
                 TimePeriod = SOURCE_5MINS_AGGREGATION,
                 Conditions = new List<ConditionApiModel>
@@ -311,6 +319,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = rule.Severity,
                 AggregationWindow = ASA_AGGREGATION_WINDOW_TUMBLING_5MINS,
                 Fields = rule.Conditions.Select(x => x.Field),
+                Actions = rule.Actions,
                 __rulefilterjs = $"return ({cond1} && {cond2} && {cond3}) ? true : false;"
             });
             Assert.Equal(expectedJSON, json);
@@ -332,6 +341,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Description = Guid.NewGuid().ToString(),
                 GroupId = Guid.NewGuid().ToString(),
                 Severity = Guid.NewGuid().ToString(),
+                Actions = new List<IActionApiModel>() { GetSampleActionData() },
                 Calculation = aggregator,
                 TimePeriod = SOURCE_5MINS_AGGREGATION,
                 Conditions = new List<ConditionApiModel>
@@ -356,9 +366,23 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = rule.Severity,
                 AggregationWindow = ASA_AGGREGATION_WINDOW_TUMBLING_5MINS,
                 Fields = rule.Conditions.Select(x => x.Field),
+                Actions = rule.Actions,
                 __rulefilterjs = $"return ({cond1}) ? true : false;"
             });
             Assert.Equal(expectedJSON, json);
+        }
+
+        public static EmailActionApiModel GetSampleActionData()
+        {
+            return new EmailActionApiModel()
+            {
+                ActionType = Microsoft.Azure.IoTSolutions.AsaManager.Services.Models.Type.Email,
+                Parameters = new Dictionary<string, object>()
+                {
+                    {"Template", "This is a new email" },
+                    {"Email", new List<string>(){"azureTest2@gmail.com", "azureTest@gmail.com"} }
+                }
+            };
         }
     }
 }
