@@ -34,6 +34,12 @@
             //"dependsOn":[
             //    "source-env"
             //]
+            "options": {
+                "env": {
+                    "PCS_AUTH_ISSUER": "fake",
+                    "PCS_AUTH_AUDIENCE": "fake"
+                }
+            }
         },
         {
             "label": "build-iothubmanager",
@@ -50,6 +56,12 @@
             //"dependsOn":[
             //    "source-env"
             //]
+            "options": {
+                "env": {
+                    "PCS_AUTH_ISSUER": "fake",
+                    "PCS_AUTH_AUDIENCE": "fake"
+                }
+            }
         },
         {
             "label": "build-auth",
