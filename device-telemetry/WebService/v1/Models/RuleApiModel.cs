@@ -2,11 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Exceptions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models.Actions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Rule = Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models.Rule;
 
 namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Models
@@ -53,6 +52,9 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Models
         [JsonProperty(PropertyName = "TimePeriod")]
         public string TimePeriod { get; set; } = "0";
 
+        [JsonProperty(PropertyName = "Actions")]
+        public List<ActionApiModel> Actions { get; set; } = new List<ActionApiModel>();
+
         [JsonProperty(PropertyName = "$metadata", Order = 1000)]
         public IDictionary<string, string> Metadata => new Dictionary<string, string>
         {
@@ -85,7 +87,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Models
                     this.Deleted = rule.Deleted;
                 }
 
-                foreach (Condition condition in rule.Conditions)
+                foreach (var action in rule.Actions)
+                {
+                    this.Actions.Add(new ActionApiModel(action));
+                }
+
+                foreach (var condition in rule.Conditions)
                 {
                     this.Conditions.Add(new ConditionApiModel(condition));
                 }
@@ -94,28 +101,36 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Models
 
         public Rule ToServiceModel()
         {
-            List<Condition> conditions = new List<Condition>();
-            foreach (ConditionApiModel condition in this.Conditions)
+            var conditions = new List<Condition>();
+            var actions = new List<IActionItem>();
+
+            foreach (var condition in this.Conditions)
             {
                 conditions.Add(condition.ToServiceModel());
             }
 
-            if (!Enum.TryParse<CalculationType>(this.Calculation, true, out CalculationType calculation))
+            foreach (var action in this.Actions)
+            {
+                actions.Add(action.ToServiceModel());
+            }
+
+            if (!Enum.TryParse(this.Calculation, true, out CalculationType calculation))
             {
                 throw new InvalidInputException($"The value of 'Calculation' - '{this.Calculation}' is not valid");
             }
 
-            if (!Enum.TryParse<SeverityType>(this.Severity, true, out SeverityType severity))
+            if (!Enum.TryParse(this.Severity, true, out SeverityType severity))
             {
                 throw new InvalidInputException($"The value of 'Severity' - '{this.Severity}' is not valid");
             }
 
-            if (!long.TryParse(!string.IsNullOrEmpty(this.TimePeriod) ? this.TimePeriod : "0", out long timePeriod) || (calculation == CalculationType.Average && string.IsNullOrEmpty(this.TimePeriod)))
+            if (!long.TryParse(!string.IsNullOrEmpty(this.TimePeriod) ? this.TimePeriod : "0", out var timePeriod) ||
+                (calculation == CalculationType.Average && string.IsNullOrEmpty(this.TimePeriod)))
             {
                 throw new InvalidInputException($"The value of 'TimePeriod' - '{this.TimePeriod}' is not valid");
             }
 
-            bool deleted = false;
+            var deleted = false;
             if (this.Deleted.HasValue)
             {
                 deleted = this.Deleted.Value;
@@ -135,6 +150,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.v1.Models
                 Calculation = calculation,
                 TimePeriod = timePeriod,
                 Conditions = conditions,
+                Actions = actions,
                 Deleted = deleted
             };
         }

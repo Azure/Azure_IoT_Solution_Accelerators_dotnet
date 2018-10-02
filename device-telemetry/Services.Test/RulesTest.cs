@@ -10,6 +10,7 @@ using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Exceptions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.External;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Http;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models.Actions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Runtime;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Storage.StorageAdapter;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.StorageAdapter;
@@ -17,6 +18,7 @@ using Moq;
 using Newtonsoft.Json;
 using Services.Test.helpers;
 using Xunit;
+using Type = System.Type;
 
 namespace Services.Test
 {
@@ -60,7 +62,7 @@ namespace Services.Test
             var list = await this.rulesMock.Object.GetListAsync(null, 0, LIMIT, null, false);
 
             // Assert
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
         }
 
         [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
@@ -74,6 +76,18 @@ namespace Services.Test
 
             // Assert
             Assert.NotEmpty(list);
+
+            // Assert action has been read.
+            bool isActionReadCorrect = true;
+            foreach (Rule rule in list)
+            {
+                if (rule.Actions == null)
+                {
+                    isActionReadCorrect = false;
+                    break;
+                }
+                Assert.True(isActionReadCorrect);
+            }
         }
 
         /**
@@ -416,6 +430,16 @@ namespace Services.Test
                 }
             };
 
+            var sampleActions = new List<IActionItem>
+            {
+                new EmailActionItem(
+                    new Dictionary<string, object>
+                    {
+                        {"email", new Newtonsoft.Json.Linq.JArray(){"sampleEmail@gmail.com", "sampleEmail2@gmail.com"}},
+                        {"subject", "Test Email"}
+                    })
+            };
+
             var sampleRules = new List<Rule>
             {
                 new Rule()
@@ -425,7 +449,8 @@ namespace Services.Test
                     Description = "Sample description 1",
                     GroupId = "Prototyping devices",
                     Severity = SeverityType.Critical,
-                    Conditions = sampleConditions
+                    Conditions = sampleConditions,
+                    Actions = sampleActions
                 },
                 new Rule()
                 {
@@ -434,7 +459,8 @@ namespace Services.Test
                     Description = "Sample description 2",
                     GroupId =  "Prototyping devices",
                     Severity =  SeverityType.Warning,
-                    Conditions =  sampleConditions
+                    Conditions = sampleConditions,
+                    Actions = sampleActions
                 }
             };
 

@@ -136,7 +136,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
             if (!this.InitializeTokenValidationAsync(context.RequestAborted).Result)
             {
                 context.Response.StatusCode = (int) HttpStatusCode.ServiceUnavailable;
-                context.Response.Headers["Content-Type"] = "application/json";
+                context.Response.Headers["Content-ActionType"] = "application/json";
                 context.Response.WriteAsync(ERROR503_AUTH);
                 return Task.CompletedTask;
             }
@@ -167,7 +167,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Auth
 
             this.log.Warn("Authentication required", () => { });
             context.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
-            context.Response.Headers["Content-Type"] = "application/json";
+            context.Response.Headers["Content-ActionType"] = "application/json";
             context.Response.WriteAsync(ERROR401);
 
             return Task.CompletedTask;
