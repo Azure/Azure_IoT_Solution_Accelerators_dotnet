@@ -1,0 +1,19 @@
+FROM microsoft/aspnetcore-build:2.0
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+
+EXPOSE 9022
+
+WORKDIR /src
+COPY ["remote-monitoring.sln", "./"]
+COPY ["storage-adapter/Services/Services.csproj", "storage-adapter/Services/"]
+COPY ["storage-adapter/WebService/WebService.csproj", "storage-adapter/WebService/"]
+COPY ["storage-adapter/WebService/azds_entrypoint.sh", "storage-adapter/WebService/azds_entrypoint.sh"]
+
+RUN chmod 777 /src/storage-adapter/WebService/azds_entrypoint.sh
+RUN dotnet restore -nowarn:msb3202,nu1503
+COPY . .
+WORKDIR "/src/storage-adapter/WebService"
+RUN dotnet build "WebService.csproj"
+
+ENTRYPOINT  ["sh", "/src/storage-adapter/WebService/azds_entrypoint.sh"]
