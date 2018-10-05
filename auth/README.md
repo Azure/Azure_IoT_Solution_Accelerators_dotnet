@@ -151,7 +151,7 @@ https://github.com/Azure/pcs-auth-dotnet/issues.
 [build-badge]:https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_apis/build/status/Consolidated%20Repo
 [build-url]: https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_build/latest?definitionId=22
 [issues-badge]: https://img.shields.io/github/issues/azure/pcs-auth-dotnet.svg
-[issues-url]: https://github.com/azure/pcs-auth-dotnet/issues
+[issues-url]: https://github.com/Azure/remote-monitoring-services-dotnet/issues?q=is%3Aissue+is%3Aopen+label%3Aauth
 [gitter-badge]: https://img.shields.io/gitter/room/azure/iot-solutions.js.svg
 [gitter-url]: https://gitter.im/azure/iot-solutions
 

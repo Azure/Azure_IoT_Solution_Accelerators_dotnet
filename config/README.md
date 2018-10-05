@@ -187,7 +187,7 @@ Licensed under the [MIT](LICENSE) License.
 [build-badge]:https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_apis/build/status/Consolidated%20Repo
 [build-url]: https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_build/latest?definitionId=22
 [issues-badge]: https://img.shields.io/github/issues/azure/pcs-config-dotnet.svg
-[issues-url]: https://github.com/azure/pcs-config-dotnet/issues
+[issues-url]: https://github.com/Azure/remote-monitoring-services-dotnet/issues?q=is%3Aissue+is%3Aopen+label%3Aconfig
 [gitter-badge]: https://img.shields.io/gitter/room/azure/iot-solutions.js.svg
 [gitter-url]: https://gitter.im/azure/iot-solutions
 [windows-envvars-howto-url]: https://superuser.com/questions/949560/how-do-i-set-system-environment-variables-in-windows-10
