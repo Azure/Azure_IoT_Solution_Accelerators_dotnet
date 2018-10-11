@@ -18,6 +18,7 @@ namespace Microsoft.Azure.IoTSolutions.StorageAdapter.Services.Wrappers
         public DocumentClientFactory(IServicesConfig config, ILogger logger)
         {
             var match = Regex.Match(config.DocumentDbConnString, "^AccountEndpoint=(?<endpoint>.*);AccountKey=(?<key>.*);$");
+            logger.Error(config.DocumentDbConnString, () => { });
             if (!match.Success)
             {
                 var message = "Invalid connection string for Cosmos DB";
