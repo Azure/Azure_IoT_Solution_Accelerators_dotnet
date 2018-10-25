@@ -8,14 +8,6 @@
         }
     },
     "profiles": {
-        "IIS Express": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "launchUrl": "http://localhost:9022/v1/status",
-            "environmentVariables": {
-                "PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING": "$(PCS_STORAGEADAPTER_DOCUMENTDB_CONNSTRING)"
-            }
-        },
         "WebService": {
             "commandName": "Project",
             "launchBrowser": true,

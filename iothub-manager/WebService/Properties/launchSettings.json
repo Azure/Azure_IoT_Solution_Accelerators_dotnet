@@ -8,16 +8,6 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "http://localhost:9002/v1/status",
-      "environmentVariables": {
-        "PCS_AUTH_WEBSERVICE_URL" : "http://localhost:9001/v1",
-        "PCS_IOTHUB_CONNSTRING": "$(PCS_IOTHUB_CONNSTRING)",
-        "PCS_STORAGEADAPTER_WEBSERVICE_URL": "http://localhost:9022/v1"
-      }
-    },
     "WebService": {
       "commandName": "Project",
       "launchBrowser": true,

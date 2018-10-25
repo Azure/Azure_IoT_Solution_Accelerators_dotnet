@@ -8,23 +8,6 @@
     }
   },
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
-        "launchBrowser": true,
-        "launchUrl": "http://localhost:9004/v1/status",
-        "environmentVariables": {
-          "PCS_TELEMETRY_DOCUMENTDB_CONNSTRING": "$(PCS_TELEMETRY_DOCUMENTDB_CONNSTRING)",
-          "PCS_TELEMETRY_STORAGE_TYPE": "$(PCS_TELEMETRY_STORAGE_TYPE)",
-          "PCS_STORAGEADAPTER_WEBSERVICE_URL": "http://localhost:9022/v1",
-          "PCS_AUTH_WEBSERVICE_URL": "http://localhost:9001/v1",
-          "PCS_TSI_FQDN": "$(PCS_TSI_FQDN)",
-          "PCS_AAD_APPID": "$(PCS_AAD_APPID)", 
-          "PCS_AAD_APPSECRET": "$(PCS_AAD_APPSECRET)",
-          "PCS_AAD_TENANT": "$(PCS_AAD_TENANT)",
-          "PCS_DIAGNOSTICS_WEBSERVICE_URL": "http://localhost:9006/v1",
-          "PCS_AUTH_REQUIRED": "false"
-        }
-    },
     "WebService": {
       "commandName": "Project",
       "launchBrowser": true,
