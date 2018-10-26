@@ -16,7 +16,7 @@
                 "UpdateRules",
                 "DeleteRules",
                 "CreateJobs",
-                "UpdateSimManagement",
+                "UpdateSIMManagement",
                 "CreateDeployments",
                 "DeleteDeployments",
                 "CreatePackages",
