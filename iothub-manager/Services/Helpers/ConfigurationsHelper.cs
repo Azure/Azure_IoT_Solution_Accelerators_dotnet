@@ -1,11 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.IoTSolutions.IotHubManager.Services.Exceptions;
 using Microsoft.Azure.IoTSolutions.IotHubManager.Services.Models;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
 {
@@ -60,7 +62,9 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
             var customMetrics = packageConfiguration.Metrics?.Queries;
             if (customMetrics != null)
             {
-                configuration.Metrics.Queries = customMetrics;
+                configuration.Metrics.Queries = SubstituteDeploymentIdIfPresent(
+                                                                    customMetrics,
+                                                                    deploymentId);
             }
 
             // Add optional labels
@@ -87,6 +91,23 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
             }
 
             return false;
+        }
+
+        // Replaces DeploymentId, if present, in the custom metrics query 
+        public static IDictionary<string, string> SubstituteDeploymentIdIfPresent(
+            IDictionary<string, string> customMetrics, 
+            string deploymentId)
+        {
+            const string statusClause = @"configurations\.\[\[[a-zA-Z0-9\-]+\]\]";
+            string updatedStatusClause = "configurations.[[" + deploymentId + "]]";
+            IDictionary<string, string> metrics = new Dictionary<string, string>();
+
+            foreach (KeyValuePair<string, string> query in customMetrics)
+            {
+                metrics[query.Key] = Regex.Replace(query.Value, statusClause, updatedStatusClause);
+            }
+
+            return metrics;
         }
     }
 }
