@@ -46,9 +46,15 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService
                 try
                 {
                     this.log.Info("Creating seed data...", () => { });
-                    this.seed.TrySeedAsync().Wait(SEED_TIMEOUT_SECS * 1000);
-                    this.log.Info("Seed data created", () => { });
-                    return;
+                    var taskCompleted = this.seed.TrySeedAsync().Wait(SEED_TIMEOUT_SECS * 1000);
+
+                    if (taskCompleted)
+                    {
+                        this.log.Info("Seed data created", () => { });
+                        return;
+                    }
+
+                    this.log.Warn("Seed creation timed out. Setting to rerun.", () => { });
                 }
                 catch (Exception e)
                 {
