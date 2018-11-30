@@ -36,7 +36,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services.Models
                 AND configurations.[[{0}]].status = 'Applied' 
                 AND properties.desired.$version = properties.reported.lastDesiredVersion  
                 AND properties.reported.lastDesiredStatus.code = 200" },
-            { QueryType.FAILED, @"SELECT deviceId FROM devices WHERE 
+            { QueryType.FAILED, @"SELECT deviceId FROM devices.modules WHERE 
                 moduleId = '$edgeAgent' 
                 AND configurations.[[{0}]].status = 'Applied' 
                 AND properties.desired.$version = properties.reported.lastDesiredVersion 

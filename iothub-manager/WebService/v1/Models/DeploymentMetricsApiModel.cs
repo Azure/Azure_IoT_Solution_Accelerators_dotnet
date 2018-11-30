@@ -35,7 +35,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Models
 
             this.CustomMetrics = metricsServiceModel.CustomMetrics;
             this.SystemMetrics = metricsServiceModel.SystemMetrics != null && metricsServiceModel.SystemMetrics.Count > 0 ? 
-                                                        metricsServiceModel.SystemMetrics : this.SystemMetrics;
+                metricsServiceModel.SystemMetrics : this.SystemMetrics;
             this.DeviceStatuses = metricsServiceModel.DeviceStatuses;
 
             if (metricsServiceModel.DeviceMetrics != null)
