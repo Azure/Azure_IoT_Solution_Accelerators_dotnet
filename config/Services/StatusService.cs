@@ -53,7 +53,10 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
             SetServiceStatus(deviceTelemetryName, deviceTelemetryResult, result, errors);
 
             // Check access to DeviceSimulation
-            var deviceSimulationResult = await this.PingServiceAsync(
+
+            /* TODO: Remove PingSimulationAsync and use PingServiceAsync once DeviceSimulation has started 
+             * using the new 'Status' model */
+            var deviceSimulationResult = await this.PingSimulationAsync(
                 deviceSimulationName,
                 this.servicesConfig.DeviceSimulationApiUrl);
             SetServiceStatus(deviceSimulationName, deviceSimulationResult, result, errors);
@@ -115,6 +118,31 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services
                 {
                     var data = JsonConvert.DeserializeObject<StatusServiceModel>(response.Content);
                     result = data.Status;
+                }
+            }
+            catch (Exception e)
+            {
+                this.log.Error(result.Message, () => new { e });
+            }
+
+            return result;
+        }
+
+        private async Task<StatusResultServiceModel> PingSimulationAsync(string serviceName, string serviceURL)
+        {
+            var result = new StatusResultServiceModel(false, $"{serviceName} check failed");
+            try
+            {
+                var response = await this.httpClient.GetAsync(this.PrepareRequest($"{serviceURL}/status"));
+                if (!response.IsSuccessStatusCode)
+                {
+                    result.Message = $"Status code: {response.StatusCode}; Response: {response.Content}";
+                }
+                else
+                {
+                    var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Content);
+                    result.Message = data["Status"].ToString();
+                    result.IsHealthy = data["Status"].ToString().StartsWith("OK:");
                 }
             }
             catch (Exception e)

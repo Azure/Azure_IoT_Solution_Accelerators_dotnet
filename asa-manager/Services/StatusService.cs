@@ -75,7 +75,7 @@ namespace Microsoft.Azure.IoTSolutions.AsaManager.Services
             var storageResult = await alarmsCosmosDb.PingAsync();
             SetServiceStatus("Storage", storageResult, result, errors);
 
-            // Check access to Event
+            // Check access to EventHub
             var eventHubResult = await this.PingEventHubAsync();
             SetServiceStatus("EventHub", eventHubResult, result, errors);
 
