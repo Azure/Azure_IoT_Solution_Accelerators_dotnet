@@ -52,39 +52,13 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Models
 
             this.Priority = deployment.Priority;
 
-            if (deployment.Labels.ContainsKey(ConfigurationsHelper.PACKAGE_TYPE_LABEL) &&
-                !(string.IsNullOrEmpty(deployment.Labels[ConfigurationsHelper.PACKAGE_TYPE_LABEL])))
+            if (ConfigurationsHelper.IsEdgeDeployment(deployment))
             {
-                if (deployment.Labels.Values.Contains(PackageType.EdgeManifest.ToString()))
-                {
-                    this.PackageType = PackageType.EdgeManifest;
-                }
-                else if (deployment.Labels.Values.Contains(PackageType.DeviceConfiguration.ToString()))
-                {
-                    this.PackageType = PackageType.DeviceConfiguration;
-                }
-                else
-                {
-                    throw new InvalidConfigurationException("Deployment package type should not be empty.");
-                }
+                this.PackageType = PackageType.EdgeManifest;
             }
             else
             {
-                /* This is for the backward compatibility, as some of the old
-                *  deployments may not have the required label.
-                */
-                if (deployment.Content?.ModulesContent != null)
-                {
-                    this.PackageType = PackageType.EdgeManifest;
-                }
-                else if (deployment.Content?.DeviceContent != null)
-                {
-                    this.PackageType = PackageType.DeviceConfiguration;
-                }
-                else
-                {
-                    throw new InvalidConfigurationException("Deployment package type should not be empty.");
-                }
+                this.PackageType = PackageType.DeviceConfiguration;
             }
 
             if (deployment.Labels.ContainsKey(ConfigurationsHelper.CONFIG_TYPE_LABEL))

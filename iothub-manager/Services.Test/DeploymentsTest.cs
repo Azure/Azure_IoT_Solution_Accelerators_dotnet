@@ -183,6 +183,7 @@ namespace Services.Test
                 DeviceGroupId = deviceGroupId,
                 DeviceGroupQuery = deviceGroupQuery,
                 PackageContent = packageContent,
+                PackageType = PackageType.EdgeManifest,
                 Priority = priority
             };
 
