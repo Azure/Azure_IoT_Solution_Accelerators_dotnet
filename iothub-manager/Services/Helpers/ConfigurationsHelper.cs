@@ -145,5 +145,22 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
 
             return metrics;
         }
+
+        // Replaces DeploymentId, if present, in the custom metrics query 
+        public static IDictionary<string, string> SubstituteDeploymentIdIfPresent(
+            IDictionary<string, string> customMetrics, 
+            string deploymentId)
+        {
+            const string deploymentClause = @"configurations\.\[\[[a-zA-Z0-9\-]+\]\]";
+            string updatedDeploymentClause = $"configurations.[[{deploymentId}]]";
+            IDictionary<string, string> metrics = new Dictionary<string, string>();
+
+            foreach (KeyValuePair<string, string> query in customMetrics)
+            {
+                metrics[query.Key] = Regex.Replace(query.Value, deploymentClause, updatedDeploymentClause);
+            }
+
+            return metrics;
+        }
     }
 }
