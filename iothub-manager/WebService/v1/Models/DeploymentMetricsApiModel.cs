@@ -11,8 +11,8 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Models
     {
         private const string APPLIED_METRICS_KEY = "appliedCount";
         private const string TARGETED_METRICS_KEY = "targetedCount";
-        private const string SUCCESSFUL_METRICS_KEY = "succeededCount";
-        private const string FAILED_METRICS_KEY = "failedCount";
+        private const string SUCCESSFUL_METRICS_KEY = "reportedSuccessfulCount";
+        private const string FAILED_METRICS_KEY = "reportedFailedCount";
         private const string PENDING_METRICS_KEY = "pendingCount";
 
         [JsonProperty(PropertyName = "SystemMetrics")]
@@ -34,8 +34,8 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Models
             if (metricsServiceModel == null) return;
 
             this.CustomMetrics = metricsServiceModel.CustomMetrics;
-            this.SystemMetrics = metricsServiceModel.SystemMetrics != null ? 
-                metricsServiceModel.SystemMetrics : this.SystemMetrics;
+            this.SystemMetrics = metricsServiceModel.SystemMetrics != null && metricsServiceModel.SystemMetrics.Count > 0 ? 
+                                                        metricsServiceModel.SystemMetrics : this.SystemMetrics;
             this.DeviceStatuses = metricsServiceModel.DeviceStatuses;
 
             if (metricsServiceModel.DeviceMetrics != null)

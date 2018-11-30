@@ -11,13 +11,15 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services.Models
     {
         public static IDictionary<QueryType, string> Queries = new Dictionary<QueryType, string>()
         {
-            { QueryType.APPLIED, @"SELECT deviceId from devices where configurations.[[{0}]].status  
+            { QueryType.APPLIED, @"SELECT deviceId from devices where configurations.[[{0}]].status   
                   = 'Applied'"},
             { QueryType.SUCCESSFUL, @"SELECT deviceId FROM devices WHERE  
-                 properties.reported.firmware.fwUpdateStatus='Current' 
+                 configurations.[[{0}]].status = 'Applied'  
+                 AND properties.reported.firmware.fwUpdateStatus='Current'  
                  AND properties.reported.firmware.type='IoTDevKit'"},
-            { QueryType.FAILED, @"SELECT deviceId FROM devices WHERE  
-                 properties.reported.firmware.fwUpdateStatus='Error'  
+            { QueryType.FAILED, @"SELECT deviceId FROM devices WHERE 
+                 configurations.[[{0}]].status = 'Applied' 
+                 AND properties.reported.firmware.fwUpdateStatus='Error'  
                  AND properties.reported.firmware.type='IoTDevKit'"}
         };
     }
@@ -26,16 +28,19 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.Services.Models
     {
         public static IDictionary<QueryType, string> Queries = new Dictionary<QueryType, string>()
         {
-            { QueryType.APPLIED, @"select deviceId from devices.modules 
-                 where moduleId = '$edgeAgent' and 
-                configurations.[[{0}]].status = 'Applied'" },
-            { QueryType.SUCCESSFUL, @"select deviceId from devices.modules 
-                where moduleId = '$edgeAgent' and 
-                properties.desired.$version = properties.reported.lastDesiredVersion and 
-                properties.reported.lastDesiredStatus.code = 200" },
+            { QueryType.APPLIED, @"SELECT deviceId from devices.modules WHERE 
+                moduleId = '$edgeAgent' 
+                AND configurations.[[{0}]].status = 'Applied'" },
+            { QueryType.SUCCESSFUL, @"SELECT deviceId from devices.modules WHERE 
+                moduleId = '$edgeAgent' 
+                AND configurations.[[{0}]].status = 'Applied' 
+                AND properties.desired.$version = properties.reported.lastDesiredVersion  
+                AND properties.reported.lastDesiredStatus.code = 200" },
             { QueryType.FAILED, @"SELECT deviceId FROM devices WHERE 
-                 properties.reported.firmware.fwUpdateStatus='Error' 
-                 AND properties.reported.firmware.type='IoTDevKit'" }
+                moduleId = '$edgeAgent' 
+                AND configurations.[[{0}]].status = 'Applied' 
+                AND properties.desired.$version = properties.reported.lastDesiredVersion 
+                AND properties.reported.lastDesiredStatus.code != 200" }
         };
     }
 
