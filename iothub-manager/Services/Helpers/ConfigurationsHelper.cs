@@ -132,7 +132,6 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
         {
             const string deploymentClause = @"configurations\.\[\[[a-zA-Z0-9\-]+\]\]";
             string updatedDeploymentClause = $"configurations.[[{deploymentId}]]";
-
             IDictionary<string, string> metrics = new Dictionary<string, string>();
 
             foreach (KeyValuePair<string, string> query in customMetrics)
