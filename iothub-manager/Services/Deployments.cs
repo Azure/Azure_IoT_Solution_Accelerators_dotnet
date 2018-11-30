@@ -211,15 +211,23 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
 
         private IDictionary<string, DeploymentStatus> GetDeviceStatuses(Configuration deployment)
         {
-            deployment.Labels.TryGetValue(ConfigurationsHelper.PACKAGE_TYPE_LABEL, out string deploymentType);
+            string deploymentType = null;
+            if (ConfigurationsHelper.IsEdgeDeployment(deployment))
+            {
+                deploymentType = PackageType.EdgeManifest.ToString();
+            }
+            else
+            {
+                deploymentType = PackageType.DeviceConfiguration.ToString();
+            }
+
             deployment.Labels.TryGetValue(ConfigurationsHelper.CONFIG_TYPE_LABEL, out string configType);
-
             IDictionary<QueryType, String> Queries = GetQueries(deploymentType, configType);
-
-            var deviceWithStatus = new Dictionary<string, DeploymentStatus>();
 
             string deploymentId = deployment.Id;
             var appliedDevices = this.GetDevicesInQuery(Queries[QueryType.APPLIED], deploymentId);
+
+            var deviceWithStatus = new Dictionary<string, DeploymentStatus>();
 
             if (!(ConfigurationsHelper.IsEdgeDeployment(deployment)) &&
                     !(configType.Equals(ConfigType.Firmware.ToString())))

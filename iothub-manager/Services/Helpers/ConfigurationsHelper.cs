@@ -83,28 +83,64 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Helpers
 
         public static Boolean IsEdgeDeployment(Configuration deployment)
         {
-            deployment.Labels.TryGetValue(PACKAGE_TYPE_LABEL, out var type);
+            string deploymentLabel = null;
 
-            if (type.Equals(PackageType.EdgeManifest.ToString()))
-            {
-                return true;
+            if (deployment.Labels != null &&
+                deployment.Labels.ContainsKey(ConfigurationsHelper.PACKAGE_TYPE_LABEL)) {
+                deploymentLabel = deployment.Labels[ConfigurationsHelper.PACKAGE_TYPE_LABEL];
             }
 
-            return false;
+            if (!(string.IsNullOrEmpty(deploymentLabel)))
+            {
+                if (deployment.Labels.Values.Contains(PackageType.EdgeManifest.ToString()))
+                {
+                    return true;
+                }
+                else if (deployment.Labels.Values.Contains(PackageType.DeviceConfiguration.ToString()))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw new InvalidConfigurationException("Deployment package type should not be empty.");
+                }
+            }
+            else
+            {
+                /* This is for the backward compatibility, as some of the old
+                *  deployments may not have the required label.
+                */
+                if (deployment.Content?.ModulesContent != null)
+                {
+                    return true;
+                }
+                else if (deployment.Content?.DeviceContent != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    throw new InvalidConfigurationException("Deployment package type should not be empty.");
+                }
+            }
         }
 
-        // Replaces DeploymentId, if present, in the custom metrics query 
+        //Replaces DeploymentId, if present, in the custom metrics query 
         public static IDictionary<string, string> SubstituteDeploymentIdIfPresent(
             IDictionary<string, string> customMetrics, 
             string deploymentId)
         {
-            const string deploymentClause = @"configurations\.\[\[[a-zA-Z0-9\-]+\]\]";
-            string updatedDeploymentClause = $"configurations.[[{deploymentId}]]";
+            const string statusClause = @"configurations\.\[\[[a-zA-Z0-9\-]+\]\]";
+            string updatedStatusClause = "configurations.[[" + deploymentId + "]]";
+
             IDictionary<string, string> metrics = new Dictionary<string, string>();
 
             foreach (KeyValuePair<string, string> query in customMetrics)
             {
-                metrics[query.Key] = Regex.Replace(query.Value, deploymentClause, updatedDeploymentClause);
+                metrics[query.Key] = Regex.Replace(
+                                query.Value,
+                                statusClause,
+                                updatedStatusClause);
             }
 
             return metrics;
