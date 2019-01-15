@@ -162,7 +162,7 @@ namespace Services.Test
                 CreateTestTwin(0, false),
                 CreateTestTwin(1, false),
                 CreateTestTwin(2, true),
-                CreateTestTwin(3, true),
+                CreateTestTwin(3, false),
             };
 
             this.registryMock
@@ -170,7 +170,7 @@ namespace Services.Test
                 .Returns(new ResultQuery(twins));
 
             this.registryMock
-                .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices where connectionState = 'Connected'"))))
+                .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices.modules where connectionState = 'Connected'"))))
                 .Returns(new ResultQuery(twins));
 
             // Act

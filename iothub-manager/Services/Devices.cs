@@ -98,16 +98,11 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
                 query = QueryConditionTranslator.ToQueryString(query);
             }
 
-            // normally we need deviceTwins for all devices to show device list
-            //var devices = await this.registry.GetDevicesAsync(MAX_GET_LIST);
-
             var twins = await this.GetTwinByQueryAsync(QUERY_PREFIX,
                                                        query,
                                                        continuationToken,
                                                        MAX_GET_LIST);
-            //var twinsMap = twins.Result.ToDictionary(twin => twin.DeviceId, twin => twin);
 
-            //var devicesList = devices.Where(dvc => twinsMap.ContainsKey(dvc.Id)).ToList();
             var connectedEdgeDevices = this.GetConnectedEdgeDevices(twins.Result).Result;
 
             // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
