@@ -99,23 +99,22 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
             }
 
             // normally we need deviceTwins for all devices to show device list
-            var devices = await this.registry.GetDevicesAsync(MAX_GET_LIST);
+            //var devices = await this.registry.GetDevicesAsync(MAX_GET_LIST);
 
             var twins = await this.GetTwinByQueryAsync(QUERY_PREFIX,
                                                        query,
                                                        continuationToken,
                                                        MAX_GET_LIST);
-            var twinsMap = twins.Result.ToDictionary(twin => twin.DeviceId, twin => twin);
+            //var twinsMap = twins.Result.ToDictionary(twin => twin.DeviceId, twin => twin);
 
-            var devicesList = devices.Where(dvc => twinsMap.ContainsKey(dvc.Id)).ToList();
-            var connectedEdgeDevices = this.GetConnectedEdgeDevices(devicesList, twinsMap).Result;
+            //var devicesList = devices.Where(dvc => twinsMap.ContainsKey(dvc.Id)).ToList();
+            var connectedEdgeDevices = this.GetConnectedEdgeDevices(twins.Result).Result;
 
             // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
-            return new DeviceServiceListModel(devicesList
-                    .Select(azureDevice => new DeviceServiceModel(azureDevice,
-                                                                  twinsMap[azureDevice.Id],
+            return new DeviceServiceListModel(twins.Result
+                    .Select(azureTwin => new DeviceServiceModel(azureTwin,
                                                                   this.ioTHubHostName,
-                                                                  connectedEdgeDevices.ContainsKey(azureDevice.Id))),
+                                                                  connectedEdgeDevices.ContainsKey(azureTwin.DeviceId))),
                                               twins.ContinuationToken);
         }
 
@@ -289,24 +288,21 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
         /// connectivity of their modules. If any of the modules are connected than the edge device
         /// should report as connected.
         /// </summary>
-        /// <param name="devicesList">The list of devices to check</param>
+        /// <param name="twinsList">The list of devices to check</param>
         /// <param name="twinsMap">Map of associated twins for those devices</param>
         /// <returns>Dictionary of edge device ids and the device</returns>
-        private async Task<Dictionary<string, Device>> GetConnectedEdgeDevices(List<Device> devicesList,
-            Dictionary<string, Twin> twinsMap)
+        private async Task<Dictionary<string, Twin>> GetConnectedEdgeDevices(List<Twin> twinsList)
         {
-            if (!devicesList.Any(dvc => dvc.Capabilities?.IotEdge ??
-                                        twinsMap.Values.Any(twin => twin.Capabilities?.IotEdge ?? false)))
+            if (!twinsList.Any(dvc => dvc.Capabilities?.IotEdge ?? dvc.Capabilities?.IotEdge ?? false))
             {
-                return new Dictionary<string, Device>();
+                return new Dictionary<string, Twin>();
             }
 
             var devicesWithConnectedModules = await this.GetDevicesWithConnectedModules();
-            var edgeDevices = devicesList
-                .Where(device => device.Capabilities?.IotEdge ??
-                           twinsMap[device.Id].Capabilities?.IotEdge ?? false)
-                .Where(edgeDvc => devicesWithConnectedModules.Contains(edgeDvc.Id))
-                .ToDictionary(edgeDevice => edgeDevice.Id, edgeDevice => edgeDevice);
+            var edgeDevices = twinsList
+                .Where(dvc => dvc.Capabilities?.IotEdge ?? dvc.Capabilities?.IotEdge ?? false)
+                .Where(edgeDvc => devicesWithConnectedModules.Contains(edgeDvc.DeviceId))
+                .ToDictionary(edgeDevice => edgeDevice.DeviceId, edgeDevice => edgeDevice);
             return edgeDevices;
         }
 

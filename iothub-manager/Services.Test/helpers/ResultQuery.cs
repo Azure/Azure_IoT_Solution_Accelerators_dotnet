@@ -30,6 +30,14 @@ namespace Services.Test.helpers
                 this.HasMoreResults = true;
             }
         }
+
+        public ResultQuery(List<Twin> twins)
+        {
+            this.results = twins;
+            this.deviceQueryResults = twins.Select(x => "{" + $"'{DEVICE_ID_KEY}':'device{x.DeviceId}'" + "}").ToList();
+            this.HasMoreResults = true;
+        }
+
         public Task<IEnumerable<Twin>> GetNextAsTwinAsync()
         {
             this.HasMoreResults = false;
