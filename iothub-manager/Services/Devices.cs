@@ -105,12 +105,26 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
 
             var connectedEdgeDevices = this.GetConnectedEdgeDevices(twins.Result).Result;
 
-            // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
-            return new DeviceServiceListModel(twins.Result
+            var deviceTasks = new List<Task<Device>>();
+            foreach (var twin in twins.Result)
+            {
+                deviceTasks.Add(this.registry.GetDeviceAsync(twin.DeviceId));
+            }
+
+            var results = await Task.WhenAll(deviceTasks);
+            var response = new DeviceServiceListModel(twins.Result
                     .Select(azureTwin => new DeviceServiceModel(azureTwin,
                                                                   this.ioTHubHostName,
                                                                   connectedEdgeDevices.ContainsKey(azureTwin.DeviceId))),
                                               twins.ContinuationToken);
+
+            response.Items.ForEach(x => {
+                var authentication = results.FirstOrDefault(y => y.Id == x.Id).Authentication;
+                x.Authentication = new AuthenticationMechanismServiceModel(authentication);
+            });
+                                            
+            // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
+            return response;
         }
 
         /// <summary>

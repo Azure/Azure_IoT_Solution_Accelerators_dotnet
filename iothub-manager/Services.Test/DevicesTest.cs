@@ -154,24 +154,25 @@ namespace Services.Test
         public async Task TestConnectedEdgeDevice()
         {
             // Arrange
-            // Set only 3 of the devices to be marked as connected
-            // The first two are non-edge devices so it shouldn't be listed
-            // as connected in the result
-            var twins = new List<Twin>()
-            {
-                CreateTestTwin(0, false),
-                CreateTestTwin(1, false),
-                CreateTestTwin(2, true),
-                CreateTestTwin(3, false),
-            };
+            var testDevices = (List<Device>)CreateTestListOfDevices();
 
             this.registryMock
                 .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices"))))
-                .Returns(new ResultQuery(twins));
+                .Returns(new ResultQuery(4));
 
+            // Set only 3 of the devices to be marked as connected
+            // The first two are non-edge devices so it shouldn't be listed
+            // as connected in the result
             this.registryMock
                 .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices.modules where connectionState = 'Connected'"))))
-                .Returns(new ResultQuery(twins));
+                .Returns(new ResultQuery(3));
+
+            this.registryMock
+                .SetupSequence(x => x.GetDeviceAsync(It.IsAny<string>()))
+                .ReturnsAsync(testDevices[0])
+                .ReturnsAsync(testDevices[1])
+                .ReturnsAsync(testDevices[2])
+                .ReturnsAsync(testDevices[3]);
 
             // Act
             var allDevices = await this.devices.GetListAsync("", "");
@@ -220,7 +221,6 @@ namespace Services.Test
         {
             var twin = new Twin()
             {
-                DeviceId = valueToReport.ToString(),
                 Properties = new TwinProperties(),
                 Capabilities = isEdgeDevice ? new DeviceCapabilities() { IotEdge = true } : null
             };
