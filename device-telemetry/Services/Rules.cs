@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Diagnostics;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Exceptions;
@@ -49,7 +48,6 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
     public class Rules : IRules
     {
         private const string STORAGE_COLLECTION = "rules";
-        private const string INVALID_CHARACTER = @"[^A-Za-z0-9:;.,_\-]";
         private const string DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:sszzz";
 
         private readonly IStorageAdapterClient storage;
@@ -91,6 +89,8 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public async Task DeleteAsync(string id)
         {
+            InputValidator.Validate(id);
+
             Rule existing;
             try
             {
@@ -125,11 +125,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public async Task<Rule> GetAsync(string id)
         {
-            if (Regex.IsMatch(id, INVALID_CHARACTER))
-            {
-                this.log.Debug("id contains illegal characters.", () => new { id });
-                throw new InvalidInputException("id contains illegal characters.");
-            }
+            InputValidator.Validate(id);
 
             var item = await this.storage.GetAsync(STORAGE_COLLECTION, id);
             var rule = this.Deserialize(item.Data);
@@ -147,6 +143,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
             string groupId,
             bool includeDeleted)
         {
+            InputValidator.Validate(order);
+            if (!string.IsNullOrEmpty(groupId))
+            {
+                InputValidator.Validate(groupId);
+            }
+
             var data = await this.storage.GetAllAsync(STORAGE_COLLECTION);
             var ruleList = new List<Rule>();
             foreach (var item in data.Items)
@@ -205,6 +207,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
             int limit,
             string[] devices)
         {
+            InputValidator.Validate(order);
+            foreach (var device in devices)
+            {
+                InputValidator.Validate(device);
+            }
+
             var alarmCountByRuleList = new List<AlarmCountByRule>();
 
             // get list of rules
@@ -246,6 +254,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
             {
                 throw new InvalidInputException("Rule not provided.");
             }
+            rule.Validate();
 
             // Ensure dates are correct
             rule.DateCreated = DateTimeOffset.UtcNow.ToString(DATE_FORMAT);
@@ -265,6 +274,8 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public async Task<Rule> UpsertIfNotDeletedAsync(Rule rule)
         {
+            rule.Validate();
+
             if (rule == null)
             {
                 throw new InvalidInputException("Rule not provided.");

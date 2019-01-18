@@ -1,4 +1,5 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+﻿
+// Copyright (c) Microsoft. All rights reserved.
 
 using System;
 using System.Threading;
@@ -22,9 +23,10 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.RecurringTasksAgent
 
         // When generating the cache, allow some time to finish, at least one minute
         private const int CACHE_TIMEOUT_SECS = 90;
-        
+
         private readonly IDeviceProperties deviceProperties;
         private readonly ILogger log;
+        private Timer cacheUpdateTimer;
 
         public Agent(
             IDeviceProperties deviceProperties,
@@ -66,7 +68,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.RecurringTasksAgent
             try
             {
                 this.log.Info("Scheduling a DeviceProperties cache update", () => new { CACHE_UPDATE_SECS });
-                var unused = new Timer(
+                this.cacheUpdateTimer = new Timer(
                     this.UpdateDevicePropertiesCache,
                     null,
                     1000 * CACHE_UPDATE_SECS,

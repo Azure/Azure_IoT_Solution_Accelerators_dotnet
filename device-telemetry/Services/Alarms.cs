@@ -2,10 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
@@ -55,8 +52,6 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
     public class Alarms : IAlarms
     {
-        private const string INVALID_CHARACTER = @"[^A-Za-z0-9:;.,_\-]";
-
         private readonly ILogger log;
         private readonly IStorageClient storageClient;
 
@@ -90,11 +85,6 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public Alarm Get(string id)
         {
-            if (Regex.IsMatch(id, INVALID_CHARACTER))
-            {
-                throw new InvalidInputException("id contains illegal characters.");
-            }
-
             Document doc = this.GetDocumentById(id);
             return new Alarm(doc);
         }
@@ -160,11 +150,6 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
                 limit,
                 devices, DEVICE_ID_KEY);
 
-            if (Regex.IsMatch(id, INVALID_CHARACTER))
-            {
-                throw new InvalidInputException("id contains illegal characters.");
-            }
-
             this.log.Debug("Created Alarm By Rule Query", () => new { sql });
 
             FeedOptions queryOptions = new FeedOptions();
@@ -220,10 +205,8 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public async Task<Alarm> UpdateAsync(string id, string status)
         {
-            if (Regex.IsMatch(id, INVALID_CHARACTER))
-            {
-                throw new InvalidInputException("id contains illegal characters.");
-            }
+            InputValidator.Validate(id);
+            InputValidator.Validate(status);
 
             Document document = this.GetDocumentById(id);
             document.SetPropertyValue(STATUS_KEY, status);
@@ -238,10 +221,7 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         private Document GetDocumentById(string id)
         {
-            if (Regex.IsMatch(id, INVALID_CHARACTER))
-            {
-                throw new InvalidInputException("id contains illegal characters.");
-            }
+            InputValidator.Validate(id);
 
             var query = new SqlQuerySpec(
                 "SELECT * FROM c WHERE c.id=@id",
@@ -268,6 +248,11 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
 
         public async Task Delete(List<string> ids)
         {
+            foreach(var id in ids)
+            {
+                InputValidator.Validate(id);
+            }
+
             Task[] taskList = new Task[ids.Count];
             for (int i = 0; i < ids.Count; i++)
             {
@@ -292,6 +277,8 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
          */
         public async Task DeleteAsync(string id)
         {
+            InputValidator.Validate(id);
+
             int retryCount = 0;
             while (retryCount < this.maxDeleteRetryCount)
             {

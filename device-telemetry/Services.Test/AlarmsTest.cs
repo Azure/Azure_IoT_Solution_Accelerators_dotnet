@@ -2,9 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services;
@@ -128,6 +125,26 @@ namespace Services.Test
 
             this.logger.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Func<object>>()), Times.Once);
             this.logger.Verify(l => l.Warn(It.IsAny<string>(), It.IsAny<Func<object>>()), Times.Exactly(2));
+        }
+
+        [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
+        public async Task ThrowsOnInvalidInput()
+        {
+            // Arrange
+            var xssString = "<body onload=alert('test1')>";
+            var xssList = new List<string>
+            {
+                "<body onload=alert('test1')>",
+                "<IMG SRC=j&#X41vascript:alert('test2')>"
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidInputException>(async () => await this.alarms.DeleteAsync(xssString));
+            await Assert.ThrowsAsync<InvalidInputException>(async () => await this.alarms.Delete(xssList));
+            await Assert.ThrowsAsync<InvalidInputException>(async () => await this.alarms.UpdateAsync(xssString, xssString));
+            Assert.Throws<InvalidInputException>(() => this.alarms.GetCountByRule(xssString, DateTimeOffset.MaxValue, DateTimeOffset.MaxValue, xssList.ToArray()));
+            Assert.Throws<InvalidInputException>(() => this.alarms.List(null, null, xssString, 0, 1, xssList.ToArray()));
+            Assert.Throws<InvalidInputException>(() => this.alarms.ListByRule(xssString, DateTimeOffset.MaxValue, DateTimeOffset.MaxValue, xssString, 0, 1, xssList.ToArray()));
         }
     }
 }
