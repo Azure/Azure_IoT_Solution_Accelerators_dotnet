@@ -7,6 +7,6 @@ namespace Microsoft.Azure.IoTSolutions.Auth.Services
 {
     public interface IStatusService
     {
-        Task<StatusServiceModel> GetStatusAsync();
+        StatusServiceModel GetStatusAsync();
     }
 }

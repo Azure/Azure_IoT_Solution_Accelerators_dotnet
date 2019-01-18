@@ -103,27 +103,14 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
                                                        continuationToken,
                                                        MAX_GET_LIST);
 
-            var deviceTasks = new List<Task<Device>>();
-            foreach (var twin in twins.Result)
-            {
-                deviceTasks.Add(this.registry.GetDeviceAsync(twin.DeviceId));
-            }
-
-            var results = await Task.WhenAll(deviceTasks);
-            var twinMap = twins.Result.ToDictionary(twin => twin.DeviceId, twin => twin);
-            var connectedEdgeDevices = await this.GetConnectedEdgeDevices(results, twinMap);
+            var connectedEdgeDevices = await this.GetConnectedEdgeDevices(twins.Result);
 
             var resultModel = new DeviceServiceListModel(twins.Result
                     .Select(azureTwin => new DeviceServiceModel(azureTwin,
                                                                   this.ioTHubHostName,
                                                                   connectedEdgeDevices.ContainsKey(azureTwin.DeviceId))),
                                                                   twins.ContinuationToken);
-
-            resultModel.Items.ForEach(x => {
-                var authentication = results.FirstOrDefault(y => y.Id == x.Id).Authentication;
-                x.Authentication = new AuthenticationMechanismServiceModel(authentication);
-            });
-                                            
+            
             // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
             return resultModel;
         }
@@ -298,22 +285,17 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
         /// connectivity of their modules. If any of the modules are connected than the edge device
         /// should report as connected.
         /// </summary>
-        /// <param name="twinMap">The list of devices to check</param>
+        /// <param name="twins">The list of devices to check</param>
         /// <param name="twinsMap">Map of associated twins for those devices</param>
         /// <returns>Dictionary of edge device ids and the device</returns>
-        private async Task<Dictionary<string, Device>> GetConnectedEdgeDevices(Device[] devices, Dictionary<string, Twin> twinMap)
+        private async Task<Dictionary<string, Twin>> GetConnectedEdgeDevices(List<Twin> twins)
         {
-            if (!devices.Any(dvc => dvc.Capabilities?.IotEdge ?? dvc.Capabilities?.IotEdge ?? false))
-            {
-                return new Dictionary<string, Device>();
-            }
-
             var devicesWithConnectedModules = await this.GetDevicesWithConnectedModules();
-            var edgeDevices = devices
-                .Where(dvc => dvc.Capabilities?.IotEdge ?? twinMap[dvc.Id].Capabilities?.IotEdge ?? false)
-                .Where(edgeDvc => devicesWithConnectedModules.Contains(edgeDvc.Id))
-                .ToDictionary(edgeDevice => edgeDevice.Id, edgeDevice => edgeDevice);
-            return edgeDevices;
+            var edgeTwins = twins
+                .Where(twin => twin.Capabilities?.IotEdge ?? twin.Capabilities?.IotEdge ?? false)
+                .Where(edgeDvc => devicesWithConnectedModules.Contains(edgeDvc.DeviceId))
+                .ToDictionary(edgeDevice => edgeDevice.DeviceId, edgeDevice => edgeDevice);
+            return edgeTwins;
         }
 
         /// <summary>

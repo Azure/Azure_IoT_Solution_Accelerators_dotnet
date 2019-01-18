@@ -71,7 +71,7 @@ namespace WebService.Test.Controllers
                 Assert.Equal(filename, package.Name);
                 Assert.Equal(type, package.packageType.ToString());
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Assert.True(expectException);
             }

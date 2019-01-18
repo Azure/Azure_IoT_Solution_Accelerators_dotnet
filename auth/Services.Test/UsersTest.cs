@@ -123,7 +123,7 @@ namespace Services.Test
             {
                 token = await this.users.GetToken(audience);
             }
-            catch (InvalidConfigurationException e)
+            catch (InvalidConfigurationException)
             {
                 // Assert
                 Assert.True(exceptionThrown);

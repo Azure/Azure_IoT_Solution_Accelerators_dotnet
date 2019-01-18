@@ -154,25 +154,20 @@ namespace Services.Test
         public async Task TestConnectedEdgeDevice()
         {
             // Arrange
-            var testDevices = (List<Device>)CreateTestListOfDevices();
+            var twins = CreateTestListOfTwins();
+            var connectedTwins = CreateTestListOfTwins();
+            connectedTwins.RemoveAt(3);
 
             this.registryMock
                 .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices"))))
-                .Returns(new ResultQuery(4));
+                .Returns(new ResultQuery(twins));
 
             // Set only 3 of the devices to be marked as connected
             // The first two are non-edge devices so it shouldn't be listed
             // as connected in the result
             this.registryMock
                 .Setup(x => x.CreateQuery(It.Is<string>(s => s.Equals("SELECT * FROM devices.modules where connectionState = 'Connected'"))))
-                .Returns(new ResultQuery(3));
-
-            this.registryMock
-                .SetupSequence(x => x.GetDeviceAsync(It.IsAny<string>()))
-                .ReturnsAsync(testDevices[0])
-                .ReturnsAsync(testDevices[1])
-                .ReturnsAsync(testDevices[2])
-                .ReturnsAsync(testDevices[3]);
+                .Returns(new ResultQuery(connectedTwins));
 
             // Act
             var allDevices = await this.devices.GetListAsync("", "");
@@ -224,6 +219,7 @@ namespace Services.Test
                 Properties = new TwinProperties(),
                 Capabilities = isEdgeDevice ? new DeviceCapabilities() { IotEdge = true } : null
             };
+            twin.DeviceId = $"device{valueToReport}";
             twin.Properties.Reported = new TwinCollection("{\"test\":\"value" + valueToReport + "\"}");
             twin.Properties.Desired = new TwinCollection("{\"test\":\"value" + valueToReport + "\"}");
             return twin;
@@ -261,6 +257,17 @@ namespace Services.Test
                 DevicesTest.CreateTestDevice("device3", true),
                 DevicesTest.CreateTestDevice("device4", false),
                 DevicesTest.CreateTestDevice("device5", true),
+            };
+        }
+
+        private List<Twin> CreateTestListOfTwins()
+        {
+            return new List<Twin>()
+            {
+                DevicesTest.CreateTestTwin(0, false),
+                DevicesTest.CreateTestTwin(1, false),
+                DevicesTest.CreateTestTwin(2, true),
+                DevicesTest.CreateTestTwin(3, true)
             };
         }
     }

@@ -93,7 +93,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Models
                 lastStatusUpdated: azureTwin.StatusUpdatedTime ?? azureTwin.StatusUpdatedTime ?? new DateTime(),
                 twin: new TwinServiceModel(azureTwin),
                 ioTHubHostName: ioTHubHostName,
-                authentication: new AuthenticationMechanismServiceModel()
+                authentication: null
             )
         {
         }
