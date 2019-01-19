@@ -241,25 +241,12 @@ namespace Services.Test
                 Capabilities = isEdgeDevice ? new DeviceCapabilities() {IotEdge = true} : null
             };
             return dvc;
-        }
+        }        
 
         /// <summary>
-        /// Returns a set of edge and non-edge devices
+        /// Returns a set of edge and non-edge twins
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Device> CreateTestListOfDevices()
-        {
-            return new List<Device>()
-            {
-                DevicesTest.CreateTestDevice("device0", false),
-                DevicesTest.CreateTestDevice("device1", false),
-                DevicesTest.CreateTestDevice("device2", true),
-                DevicesTest.CreateTestDevice("device3", true),
-                DevicesTest.CreateTestDevice("device4", false),
-                DevicesTest.CreateTestDevice("device5", true),
-            };
-        }
-
         private List<Twin> CreateTestListOfTwins()
         {
             return new List<Twin>()

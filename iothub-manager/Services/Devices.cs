@@ -111,7 +111,6 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
                                                                   connectedEdgeDevices.ContainsKey(azureTwin.DeviceId))),
                                                                   twins.ContinuationToken);
             
-            // since deviceAsync does not support continuationToken for now, we need to ignore those devices which does not shown in twins
             return resultModel;
         }
 
@@ -281,12 +280,11 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services
         }
 
         /// <summary>
-        /// Retrieves the list of edge devices which are reporting as connected based on
-        /// connectivity of their modules. If any of the modules are connected than the edge device
+        /// Retrieves the list of edge twins which are reporting as connected based on
+        /// connectivity of their modules. If any of the modules are connected then the edge device
         /// should report as connected.
         /// </summary>
-        /// <param name="twins">The list of devices to check</param>
-        /// <param name="twinsMap">Map of associated twins for those devices</param>
+        /// <param name="twins">The list of twins to check</param>
         /// <returns>Dictionary of edge device ids and the device</returns>
         private async Task<Dictionary<string, Twin>> GetConnectedEdgeDevices(List<Twin> twins)
         {
