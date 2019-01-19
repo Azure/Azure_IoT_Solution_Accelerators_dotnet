@@ -32,7 +32,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Helpers
             ValidateInput(ref schemaName);
             ValidateInput(ref fromProperty);
             ValidateInput(ref toProperty);
+            ValidateInput(ref order);
             ValidateInput(ref orderProperty);
+            for (int i = 0; i < devices.Length; i++)
+            {
+                ValidateInput(ref devices[i]);
+            }
             ValidateInput(ref devicesProperty);
 
             var sqlParameterCollection = new SqlParameterCollection();

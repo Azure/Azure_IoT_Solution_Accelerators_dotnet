@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -68,6 +68,12 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services
             int limit,
             string[] devices)
         {
+            InputValidator.Validate(order);
+            foreach (var device in devices)
+            {
+                InputValidator.Validate(device);
+            }
+
             return this.timeSeriesEnabled ? 
                 await this.GetListFromTimeSeriesAsync(from, to, order, skip, limit, devices) : 
                 this.GetListFromCosmosDb(from, to, order, skip, limit, devices);

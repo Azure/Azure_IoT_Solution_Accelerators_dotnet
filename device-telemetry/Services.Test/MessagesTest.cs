@@ -4,7 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Diagnostics;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Exceptions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Models;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Runtime;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Storage.CosmosDB;
+using Microsoft.Azure.IoTSolutions.DeviceTelemetry.Services.Storage.TimeSeries;
 using Moq;
 using Newtonsoft.Json.Linq;
 using Services.Test.helpers;
@@ -17,11 +22,23 @@ namespace Services.Test
         private const int SKIP = 0;
         private const int LIMIT = 1000;
 
-        private readonly Mock<IMessages> messages;
+        private readonly Mock<IStorageClient> storageClient;
+        private readonly Mock<ITimeSeriesClient> timeSeriesClient;
+        private readonly Mock<ILogger> logger;
+
+        private readonly IMessages messages;
 
         public MessagesTest()
         {
-            this.messages = new Mock<IMessages>();
+            var servicesConfig = new ServicesConfig()
+            {
+                MessagesConfig = new StorageConfig("database", "collection"),
+                StorageType = "tsi"
+            };
+            this.storageClient = new Mock<IStorageClient>();
+            this.timeSeriesClient = new Mock<ITimeSeriesClient>();
+            this.logger = new Mock<ILogger>();
+            this.messages = new Messages(servicesConfig, this.storageClient.Object, this.timeSeriesClient.Object, this.logger.Object);
         }
 
         [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
@@ -29,9 +46,10 @@ namespace Services.Test
         {
             // Arrange
             this.ThereAreNoMessagesInStorage();
+            var devices = new string[] { "device1" };
 
             // Act
-            var list = await this.messages.Object.ListAsync(null, null, null, SKIP, LIMIT, null);
+            var list = await this.messages.ListAsync(null, null, "asc", SKIP, LIMIT, devices);
 
             // Assert
             Assert.Empty(list.Messages);
@@ -43,18 +61,34 @@ namespace Services.Test
         {
             // Arrange
             this.ThereAreSomeMessagesInStorage();
+            var devices = new string[] { "device1" };
 
             // Act
-            var list = await this.messages.Object.ListAsync(null, null, null, SKIP, LIMIT, null);
+            var list = await this.messages.ListAsync(null, null, "asc", SKIP, LIMIT, devices);
 
             // Assert
             Assert.NotEmpty(list.Messages);
             Assert.NotEmpty(list.Properties);
         }
 
+        [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
+        public async Task ThrowsOnInvalidInput()
+        {
+            // Arrange
+            var xssString = "<body onload=alert('test1')>";
+            var xssList = new List<string>
+            {
+                "<body onload=alert('test1')>",
+                "<IMG SRC=j&#X41vascript:alert('test2')>"
+            };
+
+            // Act & Assert
+            await Assert.ThrowsAsync<InvalidInputException>(async () => await this.messages.ListAsync(null, null, xssString, 0, LIMIT, xssList.ToArray()));
+        }
+
         private void ThereAreNoMessagesInStorage()
         {
-            this.messages.Setup(x => x.ListAsync(null, null, null, SKIP, LIMIT, null))
+            this.timeSeriesClient.Setup(x => x.QueryEventsAsync(null, null, It.IsAny<string>(), SKIP, LIMIT, It.IsAny<string[]>()))
                 .ReturnsAsync(new MessageList());
         }
 
@@ -75,7 +109,7 @@ namespace Services.Test
             sampleProperties.Add("data.sample_unit");
             sampleProperties.Add("data.sample_speed");
 
-            this.messages.Setup(x => x.ListAsync(null, null, null, SKIP, LIMIT, null))
+            this.timeSeriesClient.Setup(x => x.QueryEventsAsync(null, null, It.IsAny<string>(), SKIP, LIMIT, It.IsAny<string[]>()))
                 .ReturnsAsync(new MessageList(sampleMessages, sampleProperties));
         }
     }
