@@ -74,9 +74,9 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.WebService.v1.Models
             this.IsEdgeDevice = device.IsEdgeDevice;
             this.LastStatusUpdated = device.LastStatusUpdated;
             this.IoTHubHostName = device.IoTHubHostName;
-            this.Authentication = device.Authentication != null ? 
-                new AuthenticationMechanismApiModel(device.Authentication) : 
-                new AuthenticationMechanismApiModel();
+            this.Authentication = new AuthenticationMechanismApiModel(
+                device.Authentication ?? new AuthenticationMechanismServiceModel()
+            );
 
             if (device.Twin != null)
             {
