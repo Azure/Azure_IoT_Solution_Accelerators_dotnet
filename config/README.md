@@ -28,7 +28,7 @@ More information [here][rm-arch-url].
 * Get all or a single uploaded package.
 
 ## Documentation
-* View the API documentation in the [Wiki](https://github.com/Azure/remote-monitoring-services-dotnet/wiki)
+* View the API documentation in the [Wiki](https://github.com/Azure/remote-monitoring-services-dotnet/wiki/Config-Api)
 
 # How to Use
 
