@@ -28,7 +28,7 @@ More information [here][rm-arch-url].
 * Get all or a single uploaded package.
 
 ## Documentation
-* View the API documentation in the [Wiki](https://github.com/Azure/pcs-config-dotnet/wiki)
+* View the API documentation in the [Wiki](https://github.com/Azure/remote-monitoring-services-dotnet/wiki)
 
 # How to Use
 
@@ -55,10 +55,10 @@ Follow the instructions for
 This service depends on the following repositories.
 Run those services from the instructions in their READMEs in the following order.
 
-1. [Storage Adapter Dotnet Microservice](https://github.com/Azure/pcs-storage-adapter-dotnet)
-1. [Telemetry Dotnet Microservice](https://github.com/Azure/device-telemetry-dotnet)
+1. [Storage Adapter Dotnet Microservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/storage-adapter)
+1. [Telemetry Dotnet Microservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/device-telemetry)
 1. [Device Simulation Dotnet Microservice](https://github.com/Azure/device-simulation-dotnet)
-1. [Authentication Microservice](https://github.com/Azure/pcs-auth-dotnet)
+1. [Authentication Microservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/auth)
 
 ### 3. Environment variables required to run the service
 In order to run the service, some environment variables need to be
@@ -67,18 +67,18 @@ line setup below for more information. More information on environment
 variables [here](#configuration-and-environment-variables).
 
 * `PCS_STORAGEADAPTER_WEBSERVICE_URL` - the url for
-  the [Storage Adapter Webservice](https://github.com/Azure/pcs-storage-adapter-dotnet)
+  the [Storage Adapter Webservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/storage-adapter)
   used for key value storage
 * `PCS_DEVICESIMULATION_WEBSERVICE_URL` - the url for
   the [Device Simulation Webservice](https://github.com/Azure/device-simulation-dotnet.git)
   used for key value storage
 - `PCS_TELEMETRY_WEBSERVICE_URL` - the url for
-  the [Telemetry Webservice](https://github.com/Azure/device-telemetry-dotnet.git)
+  the [Telemetry Webservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/device-telemetry)
   used for key value storage
 *  `PCS_AZUREMAPS_KEY` - the [Azure Maps](https://azure.microsoft.com/services/azure-maps/) 
   API Key. This can be set to "static" if you do not have one.
 * `PCS_AUTH_WEBSERVICE_URL` = the url for
-  the [Auth Webservice](https://github.com/Azure/pcs-auth-dotnet)
+  the [Auth Webservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/auth)
   used for key value storage
 * `PCS_OFFICE365_CONNECTION_URL` (Optional) = the url for the Office 365 Logic App connector
 * `PCS_SOLUTION_NAME` (Optional) = The name of the resource group for the solution. Used only if
@@ -177,7 +177,7 @@ there are several ways to manage environment variables.
    [.vscode/launch.json](.vscode/launch.json)
 1. When running the service **with Docker** or **from the command line**, the
    application will inherit environment variables values from the system. 
-   * [This page][windows-envvars-howto-url] describes how to setup env vars
+   * [This page](windows-envvars-howto-url) describes how to setup env vars
      in Windows. We suggest to edit and execute once the
      [env-vars-setup.cmd](scripts/env-vars-setup.cmd) script included in the
      repository. The settings will persist across terminal sessions and reboots.
@@ -195,7 +195,7 @@ conventions.
 
 # Feedback
 Please enter issues, bugs, or suggestions as 
-[GitHub Issues](https://github.com/Azure/pcs-config-dotnet/issues).
+[GitHub Issues](https://github.com/Azure/remote-monitoring-services-dotnet/issues).
 
 # License
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -208,7 +208,7 @@ Licensed under the [MIT](LICENSE) License.
 [gitter-badge]: https://img.shields.io/gitter/room/azure/iot-solutions.js.svg
 [gitter-url]: https://gitter.im/azure/iot-solutions
 [windows-envvars-howto-url]: https://superuser.com/questions/949560/how-do-i-set-system-environment-variables-in-windows-10
-[Storage Adapter]:https://github.com/Azure/pcs-storage-adapter-dotnet/blob/master/README.md
+[Storage Adapter]:https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/storage-adapter
 [rm-arch-url]:https://docs.microsoft.com/en-us/azure/iot-suite/iot-suite-remote-monitoring-sample-walkthrough
 [run-with-docker-url]:https://docs.microsoft.com/azure/iot-suite/iot-suite-remote-monitoring-deploy-local#run-the-microservices-in-docker
 [postman-url]: https://www.getpostman.com
