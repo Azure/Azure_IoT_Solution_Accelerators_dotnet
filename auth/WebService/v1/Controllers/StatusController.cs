@@ -21,9 +21,9 @@ namespace Microsoft.Azure.IoTSolutions.Auth.WebService.v1.Controllers
             this.statusService = statusService;
         }
 
-        public StatusApiModel GetAsync()
+        public async Task<StatusApiModel> GetAsync()
         {
-            var result = new StatusApiModel(this.statusService.GetStatusAsync());
+            var result = new StatusApiModel(await this.statusService.GetStatusAsync());
             result.Properties.Add("AuthRequired", this.config.ClientAuthConfig?.AuthRequired.ToString());
             result.Properties.Add("Port", this.config.Port.ToString());
             return result;

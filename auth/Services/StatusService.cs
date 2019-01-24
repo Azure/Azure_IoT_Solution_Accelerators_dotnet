@@ -22,7 +22,7 @@ namespace Microsoft.Azure.IoTSolutions.Auth.Services
             this.servicesConfig = servicesConfig;
         }
 
-        public StatusServiceModel GetStatusAsync()
+        public async Task<StatusServiceModel> GetStatusAsync()
         {
             var result = new StatusServiceModel(true, "Alive and well!");
             var errors = new List<string>();
