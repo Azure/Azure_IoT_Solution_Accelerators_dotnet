@@ -23,7 +23,7 @@ project to provide a generic implementation for an end-to-end IoT solution. More
 ## Documentation
 
 * View the API documentation in the
-[Wiki](https://github.com/Azure/device-telemetry-dotnet/wiki).
+[Wiki](https://github.com/Azure/remote-monitoring-services-dotnet/wiki/Telemetry-API).
 
 # How to use
 
@@ -44,8 +44,8 @@ Follow the instructions for
 ### 2. Setup Dependencies
 
 This service depends on the following repository.
-1. [Storage Adapter Microservice](https://github.com/Azure/pcs-storage-adapter-dotnet)
-2. [Authentication Microservice](https://github.com/Azure/pcs-auth-dotnet)
+1. [Storage Adapter Microservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/storage-adapter)
+2. [Authentication Microservice](https://github.com/Azure/remote-monitoring-services-dotnet/tree/master/auth)
 
 ### 3. Environment variables required to run the service
 In order to run the service, some environment variables need to be created
@@ -201,10 +201,10 @@ Licensed under the [MIT](LICENSE) License.
 [build-badge]:https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_apis/build/status/Consolidated%20Repo
 [build-url]: https://solutionaccelerators.visualstudio.com/RemoteMonitoring/_build/latest?definitionId=22
 [issues-badge]: https://img.shields.io/github/issues/azure/device-telemetry-dotnet.svg
-[issues-url]: https://github.com/azure/device-telemetry-dotnet/issues
+[issues-url]: https://github.com/Azure/remote-monitoring-services-dotnet/issues
 [gitter-badge]: https://img.shields.io/gitter/room/azure/iot-solutions.js.svg
 [gitter-url]: https://gitter.im/azure/iot-solutions
-[project-wiki]: https://github.com/Azure/device-telemetry-dotnet/wiki/%5BAPI-Specifications%5D-Messages
+[project-wiki]: https://github.com/Azure/remote-monitoring-services-dotnet/wiki/Telemetry-API
 [postman-url]: https://www.getpostman.com
 [dotnet-install]: https://www.microsoft.com/net/learn/get-started
 [vs-install-url]: https://www.visualstudio.com/downloads
