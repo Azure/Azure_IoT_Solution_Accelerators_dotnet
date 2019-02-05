@@ -83,7 +83,7 @@ namespace TelemetryRulesAgent.Test.Models
                 Severity = (string)null,
                 AggregationWindow = (string)null,
                 Fields = new string[] { },
-                Actions = new List<object>(),
+                Actions = new List<IActionApiModel>(),
                 __rulefilterjs = "return true;"
             });
             Assert.Equal(expectedJSON, json);

@@ -67,7 +67,7 @@ namespace Microsoft.Azure.IoTSolutions.IotHubManager.Services.Models
             }
             else
             {
-                this.ConfigType = PackageType.EdgeManifest.ToString();
+                this.ConfigType = String.Empty;
             }
 
             this.DeploymentMetrics = new DeploymentMetricsServiceModel(deployment.SystemMetrics, deployment.Metrics);
