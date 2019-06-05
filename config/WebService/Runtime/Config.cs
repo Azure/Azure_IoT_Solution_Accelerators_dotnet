@@ -46,6 +46,9 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "aadAppId";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clockSkewSeconds";
 
+        private const string OPEN_ID_KEY = APPLICATION_KEY + "ClientAuth:OpenIdConnect:";
+        private const string OPEN_ID_TTL_KEY = OPEN_ID_KEY + "timeToLiveDays";
+
         private const string USER_MANAGEMENT_KEY = "UserManagementService:";
         private const string USER_MANAGEMENT_URL_KEY = USER_MANAGEMENT_KEY + "authWebServiceUrl";
 
@@ -94,6 +97,8 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
                 JwtAudience = configData.GetString(JWT_AUDIENCE_KEY),
                 // By default the allowed clock skew is 2 minutes
                 JwtClockSkew = TimeSpan.FromSeconds(configData.GetInt(JWT_CLOCK_SKEW_KEY, 120)),
+                // By default the time to live for the OpenId connect token is 7 days
+                OpenIdTimeToLive = TimeSpan.FromDays(configData.GetInt(OPEN_ID_TTL_KEY, 7))
             };
         }
     }

@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.10.0" />
     <PackageReference Include="Microsoft.Azure.EventHubs.Processor" Version="2.0.1" />
     <PackageReference Include="Microsoft.Azure.EventHubs" Version="2.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="4.5.0"  />
-    <PackageReference Include="Microsoft.Azure.KeyVault" Version="2.0.6" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.3" />
   </ItemGroup>
 </Project>

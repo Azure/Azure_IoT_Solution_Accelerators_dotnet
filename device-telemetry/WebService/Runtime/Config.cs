@@ -70,6 +70,9 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Runtime
         private const string JWT_AUDIENCE_KEY = JWT_KEY + "aadAppId";
         private const string JWT_CLOCK_SKEW_KEY = JWT_KEY + "clockSkewSeconds";
 
+        private const string OPEN_ID_KEY = APPLICATION_KEY + "ClientAuth:OpenIdConnect:";
+        private const string OPEN_ID_TTL_KEY = OPEN_ID_KEY + "timeToLiveDays";
+
         private const string ACTIONS_KEY = "Actions:";
         private const string ACTIONS_EVENTHUB_NAME = ACTIONS_KEY + "actionsEventHubName";
         private const string ACTIONS_EVENTHUB_CONNSTRING = ACTIONS_KEY + "actionsEventHubConnectionString";
@@ -136,6 +139,8 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.WebService.Runtime
                 JwtAudience = configData.GetString(JWT_AUDIENCE_KEY, String.Empty),
                 // By default the allowed clock skew is 2 minutes
                 JwtClockSkew = TimeSpan.FromSeconds(configData.GetInt(JWT_CLOCK_SKEW_KEY, 120)),
+                // By default the time to live for the OpenId connect token is 7 days
+                OpenIdTimeToLive = TimeSpan.FromDays(configData.GetInt(OPEN_ID_TTL_KEY, 7))
             };
         }
     }
