@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Net;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.ActionsAgent.Actions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.ActionsAgent.Models;
@@ -24,13 +25,14 @@ namespace Microsoft.Azure.IoTSolutions.DeviceTelemetry.ActionsAgent.Test
         {
             Mock<ILogger> loggerMock = new Mock<ILogger>();
             this.httpClientMock = new Mock<IHttpClient>();
+
+            char pathSeparator = Path.DirectorySeparatorChar;
             IServicesConfig servicesConfig = new ServicesConfig
             {
                 LogicAppEndpointUrl = "https://azure.com",
                 SolutionUrl = "test",
-                TemplateFolder = ".\\data\\"
+                TemplateFolder = $".{pathSeparator}data{pathSeparator}"
             };
-
             this.actionManager = new ActionManager(loggerMock.Object, servicesConfig, this.httpClientMock.Object);
         }
 

@@ -11,7 +11,7 @@ namespace Services.Test.TimeSeries
 {
     public class TimeSeriesValueListApiModelTest
     {
-        private readonly string TSI_SAMPLE_EVENTS_FILE = @"TimeSeries\TimeSeriesEvents.json";
+        private readonly string TSI_SAMPLE_EVENTS_FILE = $"TimeSeries{Path.DirectorySeparatorChar}TimeSeriesEvents.json";
 
         [Fact, Trait(Constants.TYPE, Constants.UNIT_TEST)]
         public void ConvertsToMessageList_WhenMultipleDeviceTypes()
