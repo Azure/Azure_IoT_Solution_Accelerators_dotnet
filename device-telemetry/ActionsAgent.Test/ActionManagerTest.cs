@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 
 using System.Collections.Generic;
-using System.Net;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.ActionsAgent.Actions;
 using Microsoft.Azure.IoTSolutions.DeviceTelemetry.ActionsAgent.Models;
