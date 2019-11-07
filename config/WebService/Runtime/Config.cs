@@ -30,7 +30,8 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
         private const string EXTERNAL_DEPENDENCIES_KEY = "ExternalDependencies:";
         private const string STORAGE_ADAPTER_URL_KEY = EXTERNAL_DEPENDENCIES_KEY + "storageAdapterWebServiceUrl";
         private const string DEVICE_SIMULATION_URL_KEY = EXTERNAL_DEPENDENCIES_KEY + "deviceSimulationWebServiceUrl";
-        private const string TELEMETRY_URL_KEY = EXTERNAL_DEPENDENCIES_KEY + "telemetryWebServiceUrl";
+        private const string TELEMETRY_URL_KEY = EXTERNAL_DEPENDENCIES_KEY + "telemetryWebServiceUrl";		       
+        private const string USER_MANAGEMENT_URL_KEY = EXTERNAL_DEPENDENCIES_KEY + "authWebServiceUrl";
 
         private const string DEVICE_SIMULATION_KEY = "DeviceSimulationService:";
         private const string TELEMETRY_KEY = "TelemetryService:";
@@ -49,8 +50,7 @@ namespace Microsoft.Azure.IoTSolutions.UIConfig.WebService.Runtime
         private const string OPEN_ID_KEY = APPLICATION_KEY + "ClientAuth:OpenIdConnect:";
         private const string OPEN_ID_TTL_KEY = OPEN_ID_KEY + "timeToLiveDays";
 
-        private const string USER_MANAGEMENT_KEY = "UserManagementService:";
-        private const string USER_MANAGEMENT_URL_KEY = USER_MANAGEMENT_KEY + "authWebServiceUrl";
+
 
         private const string ACTIONS_KEY = APPLICATION_KEY + "Actions:";
         private const string OFFICE365_LOGIC_APP_URL_KEY = ACTIONS_KEY + "office365ConnectionUrl";
